@@ -1,0 +1,84 @@
+Marketing Journey Report
+Generated on: 2025-04-22 19:28:22
+Journey Information
+Journey ID: 38iptrvibe
+Report Data
+
+# Technical Journey Map: Re-engagement Campaign
+
+## 1. Journey Path: Segment A (Initial Engagers Who Didn't Convert)
+
+### Journey Structure
+- **Start Point**: Audience Node → Initial Engagers Who Didn't Convert
+- **Node 2**: Event Filter → No conversion within 7 days of initial engagement
+- **Node 3**: Wait Node → 48 hours after filter evaluation
+- **Node 4**: Email Node → Personalized offer addressing objections
+- **Node 5**: Event Filter → Email non-responders (no open/click within 72 hours)
+- **Node 6**: Digital Ads Node → Targeted display ads with urgency messaging
+- **Node 7**: Event Filter → Top 25% by propensity score
+- **Node 8**: Wait Node → 10 days after initial engagement
+- **Node 9**: Direct Mail Node → Premium offer with personalized incentive
+
+### Technical Considerations
+- Email delivery scheduled for Tuesday/Wednesday for optimal open rates
+- Digital ads use retargeting pixels from initial campaign touchpoints
+- Direct mail uses dynamic content insertion based on engagement history
+- Budget Impact: $928 total ($6 for emails, $522 for display ads, $400 for direct mail)
+
+## 2. Journey Path: Segment B (Non-Responders with High Propensity)
+
+### Journey Structure
+- **Start Point**: Audience Node → Non-Responders with High Propensity Scores
+- **Node 2**: A/B Test Node → 50/50 split testing value propositions
+  - **Variant A**: Digital Ads Node → Feature-focused messaging
+  - **Variant B**: Digital Ads Node → Benefit-focused messaging
+- **Node 3**: Event Filter → Users who engaged with display ads
+- **Node 4**: Wait Node → 24 hours after ad engagement
+- **Node 5**: Email Node → 3-part drip sequence based on winning ad variant
+- **Node 6**: Event Filter → Top 20% by propensity score
+- **Node 7**: Batch Node → Weekly batch processing (Tuesdays at 10am)
+- **Node 8**: Direct Mail Node → Premium direct mail piece with personalized offer
+
+### Technical Considerations
+- A/B test evaluates performance after 5 days, auto-selects winner for future deployments
+- Batch processing for direct mail optimizes production costs
+- Email sequence uses dynamic content based on ad engagement behavior
+- Budget Impact: $850.68 total ($450 for display ads, $0.68 for emails, $400 for direct mail)
+
+## 3. Journey Path: Segment C (Partially Engaged Users)
+
+### Journey Structure
+- **Start Point**: Audience Node → Partially Engaged Users
+- **Node 2**: Wait Node → 5 days after last engagement
+- **Node 3**: Email Node → Re-engagement email with new messaging angle
+- **Node 4**: Event Filter → Email responders (opened or clicked)
+- **Node 5**: Digital Ads Node → Targeted display ads with complementary messaging
+- **Node 6**: Event Filter → Email non-responders
+- **Node 7**: Wait Node → 3 days after email send
+- **Node 8**: Digital Ads Node → Alternative messaging with stronger incentive
+
+### Technical Considerations
+- Email sends timed for optimal engagement windows (Tuesday-Thursday)
+- Digital ad creative for responders vs. non-responders uses different psychological triggers
+- All digital ads include frequency capping (max 15 impressions per user)
+- Budget Impact: $274.50 total ($4.50 for emails, $270 for display ads)
+
+## 4. Implementation Requirements
+
+### Technical Setup
+- **Data Integration**: Ensure CRM data is synced daily with marketing automation platform
+- **Tracking Parameters**: Implement UTM parameters for all digital touchpoints (utm_source, utm_medium, utm_campaign, utm_content)
+- **Conversion Tracking**: Deploy event tracking for all micro-conversions (email opens, ad clicks, landing page visits)
+- **Propensity Score Calculation**: Implement daily batch processing to update propensity scores
+
+### System Requirements
+- Marketing automation platform with multi-channel capabilities
+- Real-time event processing for timely trigger execution
+- Dynamic content capabilities for personalization
+- A/B testing functionality with statistical significance calculation
+- Integration with direct mail fulfillment service via API
+
+### Reporting Framework
+- Daily performance dashboard for campaign metrics
+- Weekly optimization
+            

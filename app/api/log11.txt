@@ -1,0 +1,426 @@
+2025-04-26 16:13:27,077 - __main__ - INFO - Environment variables loaded from .env file
+2025-04-26 16:13:27,077 - __main__ - INFO - Starting server with host=0.0.0.0, port=8030, debug=True
+INFO:     Will watch for changes in these directories: ['/var/www/persona_poc_new_flow/v7/persona_tool_api_yash_new/persona_tool_api - Copy (3)']
+INFO:     Uvicorn running on http://0.0.0.0:8030 (Press CTRL+C to quit)
+INFO:     Started reloader process [3597963] using WatchFiles
+2025-04-26 16:13:27,240 - __mp_main__ - INFO - Environment variables loaded from .env file
+2025-04-26 16:13:29,015 - app.main - INFO - OpenAI API key loaded: sk-proj-...WfUA
+2025-04-26 16:13:29,016 - app.main - INFO - LangChain API key loaded: lsv2_pt_...dab0
+INFO:     Started server process [3597966]
+INFO:     Waiting for application startup.
+2025-04-26 16:13:29,029 - app.main - INFO - Initializing MongoDB connection...
+2025-04-26 16:13:29,035 - app.utils.db - INFO - Connected to MongoDB database: persona_tool_db
+2025-04-26 16:13:29,035 - app.main - INFO - Ensuring collections exist...
+2025-04-26 16:13:29,039 - app.utils.db - INFO - Ensured required collections exist
+2025-04-26 16:13:29,039 - app.main - INFO - MongoDB connection initialized successfully
+2025-04-26 16:13:29,039 - app.main - INFO - Testing MainAgent initialization...
+2025-04-26 16:13:29,089 - watchfiles.main - INFO - 1 change detected
+/var/www/persona_poc_new_flow/v7/persona_tool_api_yash_new/persona_tool_api - Copy (3)/app/utils/tool_registry.py:34: LangChainDeprecationWarning: As of langchain-core 0.3.0, LangChain uses pydantic v2 internally. The langchain_core.pydantic_v1 module was a compatibility shim for pydantic v1, and should no longer be used. Please update the code to import from Pydantic directly.
+
+For example, replace imports like: `from langchain_core.pydantic_v1 import BaseModel`
+with: `from pydantic import BaseModel`
+or the v1 compatibility namespace if you are working in a code base that has not been fully upgraded to pydantic 2 yet. 	from pydantic.v1 import BaseModel
+
+  from app.tools.persona_summary_tool import PersonaSummaryTool
+2025-04-26 16:13:29,380 - app.utils.tool_registry - INFO - Registered tool: persona_summary
+2025-04-26 16:13:29,380 - app.utils.tool_registry - INFO - Registered tool: email_personalization
+2025-04-26 16:13:29,380 - app.utils.tool_registry - INFO - Registered tool: directmail_personalization
+2025-04-26 16:13:29,380 - app.utils.tool_registry - INFO - Registered tool: persona_explain
+2025-04-26 16:13:29,380 - app.utils.tool_registry - INFO - Registered tool: digitalad_personalization
+2025-04-26 16:13:29,380 - app.utils.tool_registry - INFO - Registered tool: journy_tool
+2025-04-26 16:13:29,440 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:29,478 - app.main - INFO - MainAgent initialized successfully
+INFO:     Application startup complete.
+2025-04-26 16:13:29,790 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:30,141 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:30,491 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:30,842 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:31,192 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:31,543 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:31,893 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:32,244 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:32,594 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:32,945 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:33,295 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:33,646 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:33,996 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:34,347 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:34,697 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:35,048 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:35,398 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:35,749 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:36,099 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:36,450 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:36,800 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:37,151 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:37,501 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:37,852 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:38,202 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:38,553 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:38,903 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:39,254 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:39,604 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:39,955 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:40,306 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:40,656 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:41,007 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:41,357 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:41,708 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:42,058 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:42,409 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:42,759 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:43,110 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:43,460 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:43,811 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:44,161 - watchfiles.main - INFO - 1 change detected
+INFO:     103.240.208.27:0 - "GET /api/v1/conversations/1246?limit=100 HTTP/1.1" 200 OK
+2025-04-26 16:13:44,512 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:44,862 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:45,213 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:45,563 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:45,914 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:46,264 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:46,615 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:46,965 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:47,316 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:47,669 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:48,020 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:48,371 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:48,721 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:49,072 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:49,422 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:49,773 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:50,123 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:50,474 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:50,825 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:51,175 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:51,526 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:51,876 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:52,227 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:52,577 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:52,928 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:53,278 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:53,629 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:53,979 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:54,330 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:54,680 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:54,822 - httpx - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-26 16:13:54,836 - app.agent.main_agent - INFO - Persona creation detection result: {'persona_creation_intent': False, 'data_type_specified': '', 'should_ask_data_type': False, 'recommended_next_message': ''}
+2025-04-26 16:13:55,031 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:55,381 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:55,732 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:56,082 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:56,433 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:56,783 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:57,107 - httpx - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-26 16:13:57,110 - app.agent.main_agent - INFO - Tool selection result: {'tool_name': 'journy_tool', 'parameters': {'action': 'create_journey'}, 'required_parameters': [], 'conversation_stage': 'journey_creation_initiated', 'suggested_next_message': "I'll help you create a marketing journey. I'll guide you through the process and provide you with a document template that you can fill out with your journey details. Would you like to proceed?"}
+2025-04-26 16:13:57,113 - app.agent.main_agent - INFO - Added conversation_id=2eddf7b1-1f2b-45b3-9619-bdecf7afc4cf to tool parameters
+2025-04-26 16:13:57,113 - app.agent.main_agent - INFO - Executing tool: journy_tool with parameters: {'action': 'create_journey', 'user_id': '1246', 'session_token': '5kynxxay17okgkgs8kow', 'conversation_id': '2eddf7b1-1f2b-45b3-9619-bdecf7afc4cf'}
+2025-04-26 16:13:57,134 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:57,167 - app.agent.main_agent - ERROR - API request failed: 404 Client Error: Not Found for url: https://staging-api.boostt.ai/api/cdm/model/get
+hereh hr hrewhf sdvn s vdddddddddddddddddddddddddddd
+tool_name='journy_tool' parameters={'action': 'create_journey'} required_parameters=[] conversation_stage='journey_creation_initiated' suggested_next_message="I'll help you create a marketing journey. I'll guide you through the process and provide you with a document template that you can fill out with your journey details. Would you like to proceed?" ^^^^^^^^^^^^^^^^^^^^^ {'action': 'create_journey'}
+NO PROBLEM STATEMENT IN REQUEST
+NO AUDIENCE ID IN REQUEST
+NO PERSONA NAME IN REQUEST
+NO BUDGET IN REQUEST
+NO NAME IN REQUEST
+NO DATE IN REQUEST
+NO TARGET ID IN REQUEST
+NO has_audience_model IN REQUEST
+PARAMETERS: {'action': 'create_journey', 'user_id': '1246', 'session_token': '5kynxxay17okgkgs8kow'}
+PARAMETERS SAVED TO CONTEXT: {'user_id': '1246', 'session_token': '5kynxxay17okgkgs8kow'}
+PARAMETERS1: {'action': 'create_journey', 'user_id': '1246', 'session_token': '5kynxxay17okgkgs8kow'}
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^d  None
+#########################missing_params []
+######################### journy_tool
+actionaction, action {'action': 'create_journey', 'user_id': '1246', 'session_token': '5kynxxay17okgkgs8kow', 'conversation_id': '2eddf7b1-1f2b-45b3-9619-bdecf7afc4cf'}
+INFO:     103.240.208.27:0 - "POST /api/v1/process HTTP/1.1" 200 OK
+2025-04-26 16:13:57,484 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:57,835 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:58,185 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:58,536 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:58,886 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:59,237 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:59,587 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:13:59,938 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:00,288 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:00,639 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:00,989 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:01,340 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:01,690 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:02,041 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:02,391 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:02,742 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:02,757 - httpx - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-26 16:14:02,761 - app.agent.main_agent - INFO - Persona creation detection result: {'persona_creation_intent': False, 'data_type_specified': '', 'should_ask_data_type': False, 'recommended_next_message': ''}
+2025-04-26 16:14:03,092 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:03,443 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:03,793 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:04,144 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:04,494 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:04,845 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:05,065 - httpx - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-26 16:14:05,067 - app.agent.main_agent - INFO - Tool selection result: {'tool_name': 'journy_tool', 'parameters': {'action': 'create_journey'}, 'required_parameters': [], 'conversation_stage': 'journey_creation_initiation', 'suggested_next_message': "I'll help you create a journey. I'll provide you with a document template that you'll need to fill out with your journey details. Would you like me to share that document with you now?"}
+2025-04-26 16:14:05,069 - app.agent.main_agent - INFO - Added conversation_id=2eddf7b1-1f2b-45b3-9619-bdecf7afc4cf to tool parameters
+2025-04-26 16:14:05,069 - app.agent.main_agent - INFO - Executing tool: journy_tool with parameters: {'action': 'create_journey', 'user_id': '1246', 'session_token': '5kynxxay17okgkgs8kow', 'has_audience_model': 'yes', 'conversation_id': '2eddf7b1-1f2b-45b3-9619-bdecf7afc4cf'}
+2025-04-26 16:14:05,128 - app.agent.main_agent - ERROR - API request failed: 404 Client Error: Not Found for url: https://staging-api.boostt.ai/api/cdm/model/get
+last_6_messages [{'role': 'user', 'content': 'i want to create a journey', 'timestamp': '2025-04-26T16:13:53.331671'}, {'role': 'assistant', 'content': 'Do you have a model for the audience?', 'timestamp': '2025-04-26T16:13:57.167969'}]
+not in the match i want to create a journey
+not in the match do you have a model for the audience?
+hereh hr hrewhf sdvn s vdddddddddddddddddddddddddddd
+tool_name='journy_tool' parameters={'action': 'create_journey'} required_parameters=[] conversation_stage='journey_creation_initiation' suggested_next_message="I'll help you create a journey. I'll provide you with a document template that you'll need to fill out with your journey details. Would you like me to share that document with you now?" ^^^^^^^^^^^^^^^^^^^^^ {'action': 'create_journey'}
+NO PROBLEM STATEMENT IN REQUEST
+NO AUDIENCE ID IN REQUEST
+NO PERSONA NAME IN REQUEST
+NO BUDGET IN REQUEST
+NO NAME IN REQUEST
+NO DATE IN REQUEST
+NO TARGET ID IN REQUEST
+has_audience_model FROM REQUEST: yes
+PARAMETERS: {'action': 'create_journey', 'user_id': '1246', 'session_token': '5kynxxay17okgkgs8kow', 'has_audience_model': 'yes'}
+PARAMETERS SAVED TO CONTEXT: {'user_id': '1246', 'session_token': '5kynxxay17okgkgs8kow', 'has_audience_model': 'yes'}
+PARAMETERS1: {'action': 'create_journey', 'user_id': '1246', 'session_token': '5kynxxay17okgkgs8kow', 'has_audience_model': 'yes'}
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^d  None
+#########################missing_params []
+######################### journy_tool
+actionaction, action {'action': 'create_journey', 'user_id': '1246', 'session_token': '5kynxxay17okgkgs8kow', 'has_audience_model': 'yes', 'conversation_id': '2eddf7b1-1f2b-45b3-9619-bdecf7afc4cf'}
+Required parameters: ['user_problem_statement', 'budget', 'target_id', 'session_token', 'name', 'date', 'model_id']
+Has audience model: yes
+INFO:     103.240.208.27:0 - "POST /api/v1/process HTTP/1.1" 200 OK
+2025-04-26 16:14:05,195 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:05,546 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:05,896 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:06,247 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:06,597 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:06,948 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:07,298 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:07,649 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:07,999 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:08,350 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:08,700 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:09,051 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:09,401 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:09,752 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:10,102 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:10,451 - httpx - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-26 16:14:10,453 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:10,455 - app.agent.main_agent - INFO - Persona creation detection result: {'persona_creation_intent': False, 'data_type_specified': '', 'should_ask_data_type': False, 'recommended_next_message': ''}
+2025-04-26 16:14:10,803 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:11,154 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:11,504 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:11,855 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:12,205 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:12,556 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:12,906 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:13,150 - httpx - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-26 16:14:13,153 - app.agent.main_agent - INFO - Tool selection result: {'tool_name': 'journy_tool', 'parameters': {'action': 'create_journey'}, 'required_parameters': [], 'conversation_stage': 'journey_creation_started', 'suggested_next_message': "I'll help you create a journey. I'll generate a document with the journey planning details. Once generated, you can review and modify it before we start the actual journey processing. Would you like me to generate the journey planning document now?"}
+2025-04-26 16:14:13,155 - app.agent.main_agent - INFO - Added conversation_id=2eddf7b1-1f2b-45b3-9619-bdecf7afc4cf to tool parameters
+2025-04-26 16:14:13,155 - app.agent.main_agent - INFO - Executing tool: journy_tool with parameters: {'action': 'create_journey', 'user_id': '1246', 'model_id': 'arthwll39k0kc4k8w8sc', 'session_token': '5kynxxay17okgkgs8kow', 'has_audience_model': 'yes', 'conversation_id': '2eddf7b1-1f2b-45b3-9619-bdecf7afc4cf'}
+last_6_messages [{'role': 'user', 'content': 'i want to create a journey', 'timestamp': '2025-04-26T16:13:53.331671'}, {'role': 'assistant', 'content': 'Do you have a model for the audience?', 'timestamp': '2025-04-26T16:13:57.167969'}, {'role': 'user', 'content': 'yes', 'timestamp': '2025-04-26T16:14:00.218495'}, {'role': 'assistant', 'content': "To create a new marketing journey, I'll need some information. First, could you please provide the model for this journey?", 'timestamp': '2025-04-26T16:14:05.129161'}]
+not in the match i want to create a journey
+not in the match do you have a model for the audience?
+not in the match yes
+not in the match to create a new marketing journey, i'll need some information. first, could you please provide the model for this journey?
+hereh hr hrewhf sdvn s vdddddddddddddddddddddddddddd
+tool_name='journy_tool' parameters={'action': 'create_journey'} required_parameters=[] conversation_stage='journey_creation_started' suggested_next_message="I'll help you create a journey. I'll generate a document with the journey planning details. Once generated, you can review and modify it before we start the actual journey processing. Would you like me to generate the journey planning document now?" ^^^^^^^^^^^^^^^^^^^^^ {'action': 'create_journey'}
+NO PROBLEM STATEMENT IN REQUEST
+NO AUDIENCE ID IN REQUEST
+NO PERSONA NAME IN REQUEST
+NO BUDGET IN REQUEST
+NO NAME IN REQUEST
+NO DATE IN REQUEST
+NO TARGET ID IN REQUEST
+NO has_audience_model IN REQUEST
+has_audience_model FROM CONTEXT: yes
+PARAMETERS: {'action': 'create_journey', 'user_id': '1246', 'model_id': 'arthwll39k0kc4k8w8sc', 'session_token': '5kynxxay17okgkgs8kow', 'has_audience_model': 'yes'}
+PARAMETERS SAVED TO CONTEXT: {'user_id': '1246', 'model_id': 'arthwll39k0kc4k8w8sc', 'session_token': '5kynxxay17okgkgs8kow', 'has_audience_model': 'yes'}
+PARAMETERS1: {'action': 'create_journey', 'user_id': '1246', 'model_id': 'arthwll39k0kc4k8w8sc', 'session_token': '5kynxxay17okgkgs8kow', 'has_audience_model': 'yes'}
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^d  None
+#########################missing_params []
+######################### journy_tool
+actionaction, action {'action': 'create_journey', 'user_id': '1246', 'model_id': 'arthwll39k0kc4k8w8sc', 'session_token': '5kynxxay17okgkgs8kow', 'has_audience_model': 'yes', 'conversation_id': '2eddf7b1-1f2b-45b3-9619-bdecf7afc4cf'}
+Required parameters: ['user_problem_statement', 'budget', 'target_id', 'session_token', 'name', 'date', 'model_id']
+Has audience model: yes
+INFO:     103.240.208.27:0 - "POST /api/v1/process HTTP/1.1" 200 OK
+2025-04-26 16:14:13,257 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:13,607 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:13,958 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:14,308 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:14,659 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:15,009 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:15,360 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:15,710 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:16,061 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:16,411 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:16,761 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:17,112 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:17,462 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:17,813 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:18,163 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:18,514 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:18,864 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:19,215 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:19,565 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:19,916 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:20,123 - httpx - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-26 16:14:20,127 - app.agent.main_agent - INFO - Persona creation detection result: {'persona_creation_intent': False, 'data_type_specified': '', 'should_ask_data_type': False, 'recommended_next_message': ''}
+2025-04-26 16:14:20,266 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:20,617 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:20,967 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:21,318 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:21,668 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:22,019 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:22,328 - httpx - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-26 16:14:22,330 - app.agent.main_agent - INFO - Tool selection result: {'tool_name': 'journy_tool', 'parameters': {'action': 'create_journey'}, 'required_parameters': [], 'conversation_stage': 'journey_creation', 'suggested_next_message': "I'll help you create a journey with the selected model and audience. Would you like me to generate a journey planning document for you to review?"}
+2025-04-26 16:14:22,332 - app.agent.main_agent - INFO - Added conversation_id=2eddf7b1-1f2b-45b3-9619-bdecf7afc4cf to tool parameters
+2025-04-26 16:14:22,332 - app.agent.main_agent - INFO - Executing tool: journy_tool with parameters: {'action': 'create_journey', 'user_id': '1246', 'model_id': 'arthwll39k0kc4k8w8sc', 'session_token': '5kynxxay17okgkgs8kow', 'target_id': '67b5833b74e93a07d431bc3d', 'has_audience_model': 'yes', 'conversation_id': '2eddf7b1-1f2b-45b3-9619-bdecf7afc4cf'}
+2025-04-26 16:14:22,369 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:22,388 - app.agent.main_agent - ERROR - API request failed: 404 Client Error: Not Found for url: https://staging-api.boostt.ai/api/cdm/model/get
+last_6_messages [{'role': 'user', 'content': 'i want to create a journey', 'timestamp': '2025-04-26T16:13:53.331671'}, {'role': 'assistant', 'content': 'Do you have a model for the audience?', 'timestamp': '2025-04-26T16:13:57.167969'}, {'role': 'user', 'content': 'yes', 'timestamp': '2025-04-26T16:14:00.218495'}, {'role': 'assistant', 'content': "To create a new marketing journey, I'll need some information. First, could you please provide the model for this journey?", 'timestamp': '2025-04-26T16:14:05.129161'}, {'role': 'user', 'content': 'Selected Model: AI MODEL TEST', 'timestamp': '2025-04-26T16:14:08.026935'}, {'role': 'assistant', 'content': "I'll need some information. First, could you please provide the audience for this journey?", 'timestamp': '2025-04-26T16:14:13.252566'}]
+not in the match i want to create a journey
+not in the match do you have a model for the audience?
+not in the match yes
+not in the match to create a new marketing journey, i'll need some information. first, could you please provide the model for this journey?
+not in the match selected model: ai model test
+not in the match i'll need some information. first, could you please provide the audience for this journey?
+hereh hr hrewhf sdvn s vdddddddddddddddddddddddddddd
+tool_name='journy_tool' parameters={'action': 'create_journey'} required_parameters=[] conversation_stage='journey_creation' suggested_next_message="I'll help you create a journey with the selected model and audience. Would you like me to generate a journey planning document for you to review?" ^^^^^^^^^^^^^^^^^^^^^ {'action': 'create_journey'}
+NO PROBLEM STATEMENT IN REQUEST
+NO AUDIENCE ID IN REQUEST
+NO PERSONA NAME IN REQUEST
+NO BUDGET IN REQUEST
+NO NAME IN REQUEST
+NO DATE IN REQUEST
+TARGET ID SET FROM REQUEST: 67b5833b74e93a07d431bc3d
+NO has_audience_model IN REQUEST
+has_audience_model FROM CONTEXT: yes
+PARAMETERS: {'action': 'create_journey', 'user_id': '1246', 'model_id': 'arthwll39k0kc4k8w8sc', 'session_token': '5kynxxay17okgkgs8kow', 'target_id': '67b5833b74e93a07d431bc3d', 'has_audience_model': 'yes'}
+PARAMETERS SAVED TO CONTEXT: {'user_id': '1246', 'model_id': 'arthwll39k0kc4k8w8sc', 'session_token': '5kynxxay17okgkgs8kow', 'target_id': '67b5833b74e93a07d431bc3d', 'has_audience_model': 'yes'}
+PARAMETERS1: {'action': 'create_journey', 'user_id': '1246', 'model_id': 'arthwll39k0kc4k8w8sc', 'session_token': '5kynxxay17okgkgs8kow', 'target_id': '67b5833b74e93a07d431bc3d', 'has_audience_model': 'yes'}
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^d  None
+#########################missing_params []
+######################### journy_tool
+actionaction, action {'action': 'create_journey', 'user_id': '1246', 'model_id': 'arthwll39k0kc4k8w8sc', 'session_token': '5kynxxay17okgkgs8kow', 'target_id': '67b5833b74e93a07d431bc3d', 'has_audience_model': 'yes', 'conversation_id': '2eddf7b1-1f2b-45b3-9619-bdecf7afc4cf'}
+Required parameters: ['user_problem_statement', 'budget', 'target_id', 'session_token', 'name', 'date', 'model_id']
+Has audience model: yes
+INFO:     103.240.208.27:0 - "POST /api/v1/process HTTP/1.1" 200 OK
+2025-04-26 16:14:22,720 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:23,070 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:23,421 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:23,773 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:24,124 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:24,474 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:24,825 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:25,175 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:25,526 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:25,877 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:26,227 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:26,577 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:26,928 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:27,278 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:27,629 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:27,979 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:28,330 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:28,680 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:29,031 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:29,382 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:29,415 - httpx - INFO - HTTP Request: POST https://api.anthropic.com/v1/messages "HTTP/1.1 200 OK"
+2025-04-26 16:14:29,422 - app.agent.main_agent - INFO - Persona creation detection result: {'persona_creation_intent': True, 'data_type_specified': 'audience data', 'should_ask_data_type': False, 'recommended_next_message': "I see you want to create personalized content using audience data. I'll help you generate a persona narrative based on your audience data to inform your acquisition campaign."}
+2025-04-26 16:14:29,422 - app.agent.main_agent - INFO - Detected persona creation intent with data type: audience data
+2025-04-26 16:14:29,732 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:30,083 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:30,433 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:30,784 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:31,134 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:31,485 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:31,835 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:32,185 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:32,536 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:32,537 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+hereh hr hrewhf sdvn s vdddddddddddddddddddddddddddd
+tool_name='persona_summary' parameters={'personalization_data_type': 'audience data'} required_parameters=['audience_id'] conversation_stage='creating_persona_narrative' suggested_next_message='' ^^^^^^^^^^^^^^^^^^^^^ {'personalization_data_type': 'audience data'}
+tool_name journy_tool
+******************************
+output {'valid': True, 'missing_fields': [], 'suggestions': {'Objective': 'Reduce Customer Acquisition Cost (CAC) and increase conversion.', 'Audience Setup': 'Utilize personas, demographics, and propensity score filters to identify high-value prospects.', 'Channel Flow Steps': 'Step 1: Direct Mail (with USPS Informed Delivery) + Display Ads. Step 2: Add Email based on engagement (QR scans, clicks).', 'Nurture Journey Builder': 'Implement email sequences, retargeting, and a second direct mail piece for the most high-value, engaged, and likely to convert audiences.', 'Compliance & Approvals': 'Ensure all marketing activities comply with US privacy regulations, TCPA, and CFPB. Include checkpoints for creative sign-off, budget re-allocation decisions, and final compliance checks.', 'KPI Cards': 'Track CAC, Conversion Rate, ROI, and Engagement Metrics (QR code scans, click-through rates).', 'Data & Settings Panel': 'Monitor real-time engagement data, with weekly or monthly updates on purchase/propensity scores, and ensure CPM cap is adhered to.'}}
+analize_problem_statment_out {'valid': True, 'missing_fields': [], 'suggestions': {'Objective': 'Reduce Customer Acquisition Cost (CAC) and increase conversion.', 'Audience Setup': 'Utilize personas, demographics, and propensity score filters to identify high-value prospects.', 'Channel Flow Steps': 'Step 1: Direct Mail (with USPS Informed Delivery) + Display Ads. Step 2: Add Email based on engagement (QR scans, clicks).', 'Nurture Journey Builder': 'Implement email sequences, retargeting, and a second direct mail piece for the most high-value, engaged, and likely to convert audiences.', 'Compliance & Approvals': 'Ensure all marketing activities comply with US privacy regulations, TCPA, and CFPB. Include checkpoints for creative sign-off, budget re-allocation decisions, and final compliance checks.', 'KPI Cards': 'Track CAC, Conversion Rate, ROI, and Engagement Metrics (QR code scans, click-through rates).', 'Data & Settings Panel': 'Monitor real-time engagement data, with weekly or monthly updates on purchase/propensity scores, and ensure CPM cap is adhered to.'}}
+<class 'dict'>
+PROBLEM STATEMENT SET FROM REQUEST: Design an acquisition campaign that leverages audience data—including propensity scores and personas—to identify high-value prospects. Prioritize Direct Mail (with USPS Informed Delivery) and Display Ads for initial outreach within a defined budget cap, then auto-adapt the journey (e.g., adding Email) based on early engagement signals (QR code scans, Ad/Email clicks), propensity scores, and CPM considerations. Add Nurture sequences with Email (if audience is opted-in) and digital ads and a 2nd direct mail piece (only for the most high-value, engaged, and likely to convert audiences.) Ensure all marketing activities comply with US privacy regulations, TCPA, and CFPB. Use persona, demographics, and propensity score information to generate hyper-personalized creative. Identify the critical points in this customer journey that require human feedback (e.g., final creative or offer approvals). Key Considerations: Objective: Reduce Customer Acquisition Cost (CAC) and increase conversion. Data Constraints: Real-time engagement data (QR/code scans, clicks), weekly or monthly updates on purchase/propensity. Channel Mix: Direct Mail (with USPS Informed Delivery) and Display Ads first, then add Email if engagement is low or audience shows higher propensity. Compliance & Cost: Adhere to TCPA,  CFPB, and privacy laws; monitor CPM and conversion rates. Human Feedback Points: oCreative asset sign-off oBudget re-allocation decisions oFinal compliance checks KPIs: CAC (prospect to new customer) Conversion Rate ROI (revenue vs. campaign spend) Engagement Metrics (QR code scans, click-through rates)
+PROBLEM STATEMENT SET FROM REQUEST: Design an acquisition campaign that leverages audience data—including propensity scores and personas—to identify high-value prospects. Prioritize Direct Mail (with USPS Informed Delivery) and Display Ads for initial outreach within a defined budget cap, then auto-adapt the journey (e.g., adding Email) based on early engagement signals (QR code scans, Ad/Email clicks), propensity scores, and CPM considerations. Add Nurture sequences with Email (if audience is opted-in) and digital ads and a 2nd direct mail piece (only for the most high-value, engaged, and likely to convert audiences.) Ensure all marketing activities comply with US privacy regulations, TCPA, and CFPB. Use persona, demographics, and propensity score information to generate hyper-personalized creative. Identify the critical points in this customer journey that require human feedback (e.g., final creative or offer approvals). Key Considerations: Objective: Reduce Customer Acquisition Cost (CAC) and increase conversion. Data Constraints: Real-time engagement data (QR/code scans, clicks), weekly or monthly updates on purchase/propensity. Channel Mix: Direct Mail (with USPS Informed Delivery) and Display Ads first, then add Email if engagement is low or audience shows higher propensity. Compliance & Cost: Adhere to TCPA,  CFPB, and privacy laws; monitor CPM and conversion rates. Human Feedback Points: oCreative asset sign-off oBudget re-allocation decisions oFinal compliance checks KPIs: CAC (prospect to new customer) Conversion Rate ROI (revenue vs. campaign spend) Engagement Metrics (QR code scans, click-through rates)
+NO AUDIENCE ID IN REQUEST
+NO PERSONA NAME IN REQUEST
+NO BUDGET IN REQUEST
+NO NAME IN REQUEST
+NO DATE IN REQUEST
+NO TARGET ID IN REQUEST
+TARGET ID SET FROM CONTEXT: 67b5833b74e93a07d431bc3d
+NO has_audience_model IN REQUEST
+has_audience_model FROM CONTEXT: yes
+PARAMETERS: {'personalization_data_type': 'audience data', 'user_id': '1246', 'model_id': 'arthwll39k0kc4k8w8sc', 'session_token': '5kynxxay17okgkgs8kow', 'problem_statement': 'Design an acquisition campaign that leverages audience data—including propensity scores and personas—to identify high-value prospects. Prioritize Direct Mail (with USPS Informed Delivery) and Display Ads for initial outreach within a defined budget cap, then auto-adapt the journey (e.g., adding Email) based on early engagement signals (QR code scans, Ad/Email clicks), propensity scores, and CPM considerations. Add Nurture sequences with Email (if audience is opted-in) and digital ads and a 2nd direct mail piece (only for the most high-value, engaged, and likely to convert audiences.) Ensure all marketing activities comply with US privacy regulations, TCPA, and CFPB. Use persona, demographics, and propensity score information to generate hyper-personalized creative. Identify the critical points in this customer journey that require human feedback (e.g., final creative or offer approvals). Key Considerations: \uf0b7Objective: Reduce Customer Acquisition Cost (CAC) and increase conversion. \uf0b7Data Constraints: Real-time engagement data (QR/code scans, clicks), weekly or monthly updates on purchase/propensity. \uf0b7Channel Mix: Direct Mail (with USPS Informed Delivery) and Display Ads first, then add Email if engagement is low or audience shows higher propensity. \uf0b7Compliance & Cost: Adhere to TCPA,  CFPB, and privacy laws; monitor CPM and conversion rates. \uf0b7Human Feedback Points: oCreative asset sign-off oBudget re-allocation decisions oFinal compliance checks KPIs: \uf0b7CAC (prospect to new customer) \uf0b7Conversion Rate \uf0b7ROI (revenue vs. campaign spend) \uf0b7Engagement Metrics (QR code scans, click-through rates)', 'target_id': '67b5833b74e93a07d431bc3d', 'has_audience_model': 'yes'}
+PARAMETERS SAVED TO CONTEXT: {'personalization_data_type': 'audience data', 'user_id': '1246', 'model_id': 'arthwll39k0kc4k8w8sc', 'session_token': '5kynxxay17okgkgs8kow', 'problem_statement': 'Design an acquisition campaign that leverages audience data—including propensity scores and personas—to identify high-value prospects. Prioritize Direct Mail (with USPS Informed Delivery) and Display Ads for initial outreach within a defined budget cap, then auto-adapt the journey (e.g., adding Email) based on early engagement signals (QR code scans, Ad/Email clicks), propensity scores, and CPM considerations. Add Nurture sequences with Email (if audience is opted-in) and digital ads and a 2nd direct mail piece (only for the most high-value, engaged, and likely to convert audiences.) Ensure all marketing activities comply with US privacy regulations, TCPA, and CFPB. Use persona, demographics, and propensity score information to generate hyper-personalized creative. Identify the critical points in this customer journey that require human feedback (e.g., final creative or offer approvals). Key Considerations: \uf0b7Objective: Reduce Customer Acquisition Cost (CAC) and increase conversion. \uf0b7Data Constraints: Real-time engagement data (QR/code scans, clicks), weekly or monthly updates on purchase/propensity. \uf0b7Channel Mix: Direct Mail (with USPS Informed Delivery) and Display Ads first, then add Email if engagement is low or audience shows higher propensity. \uf0b7Compliance & Cost: Adhere to TCPA,  CFPB, and privacy laws; monitor CPM and conversion rates. \uf0b7Human Feedback Points: oCreative asset sign-off oBudget re-allocation decisions oFinal compliance checks KPIs: \uf0b7CAC (prospect to new customer) \uf0b7Conversion Rate \uf0b7ROI (revenue vs. campaign spend) \uf0b7Engagement Metrics (QR code scans, click-through rates)', 'target_id': '67b5833b74e93a07d431bc3d', 'has_audience_model': 'yes'}2025-04-26 16:14:32,573 - app.agent.main_agent - INFO - Added conversation_id=2eddf7b1-1f2b-45b3-9619-bdecf7afc4cf to tool parameters
+2025-04-26 16:14:32,573 - app.agent.main_agent - INFO - Executing tool: persona_summary with parameters: {'personalization_data_type': 'audience data', 'user_id': '1246', 'model_id': 'arthwll39k0kc4k8w8sc', 'session_token': '5kynxxay17okgkgs8kow', 'problem_statement': 'Design an acquisition campaign that leverages audience data—including propensity scores and personas—to identify high-value prospects. Prioritize Direct Mail (with USPS Informed Delivery) and Display Ads for initial outreach within a defined budget cap, then auto-adapt the journey (e.g., adding Email) based on early engagement signals (QR code scans, Ad/Email clicks), propensity scores, and CPM considerations. Add Nurture sequences with Email (if audience is opted-in) and digital ads and a 2nd direct mail piece (only for the most high-value, engaged, and likely to convert audiences.) Ensure all marketing activities comply with US privacy regulations, TCPA, and CFPB. Use persona, demographics, and propensity score information to generate hyper-personalized creative. Identify the critical points in this customer journey that require human feedback (e.g., final creative or offer approvals). Key Considerations: \uf0b7Objective: Reduce Customer Acquisition Cost (CAC) and increase conversion. \uf0b7Data Constraints: Real-time engagement data (QR/code scans, clicks), weekly or monthly updates on purchase/propensity. \uf0b7Channel Mix: Direct Mail (with USPS Informed Delivery) and Display Ads first, then add Email if engagement is low or audience shows higher propensity. \uf0b7Compliance & Cost: Adhere to TCPA,  CFPB, and privacy laws; monitor CPM and conversion rates. \uf0b7Human Feedback Points: oCreative asset sign-off oBudget re-allocation decisions oFinal compliance checks KPIs: \uf0b7CAC (prospect to new customer) \uf0b7Conversion Rate \uf0b7ROI (revenue vs. campaign spend) \uf0b7Engagement Metrics (QR code scans, click-through rates)', 'target_id': '67b5833b74e93a07d431bc3d', 'has_audience_model': 'yes', 'conversation_id': '2eddf7b1-1f2b-45b3-9619-bdecf7afc4cf'}
+2025-04-26 16:14:32,631 - app.agent.main_agent - ERROR - API request failed: 404 Client Error: Not Found for url: https://staging-api.boostt.ai/api/cdm/model/get
+
+PARAMETERS1: {'personalization_data_type': 'audience data', 'user_id': '1246', 'model_id': 'arthwll39k0kc4k8w8sc', 'session_token': '5kynxxay17okgkgs8kow', 'problem_statement': 'Design an acquisition campaign that leverages audience data—including propensity scores and personas—to identify high-value prospects. Prioritize Direct Mail (with USPS Informed Delivery) and Display Ads for initial outreach within a defined budget cap, then auto-adapt the journey (e.g., adding Email) based on early engagement signals (QR code scans, Ad/Email clicks), propensity scores, and CPM considerations. Add Nurture sequences with Email (if audience is opted-in) and digital ads and a 2nd direct mail piece (only for the most high-value, engaged, and likely to convert audiences.) Ensure all marketing activities comply with US privacy regulations, TCPA, and CFPB. Use persona, demographics, and propensity score information to generate hyper-personalized creative. Identify the critical points in this customer journey that require human feedback (e.g., final creative or offer approvals). Key Considerations: \uf0b7Objective: Reduce Customer Acquisition Cost (CAC) and increase conversion. \uf0b7Data Constraints: Real-time engagement data (QR/code scans, clicks), weekly or monthly updates on purchase/propensity. \uf0b7Channel Mix: Direct Mail (with USPS Informed Delivery) and Display Ads first, then add Email if engagement is low or audience shows higher propensity. \uf0b7Compliance & Cost: Adhere to TCPA,  CFPB, and privacy laws; monitor CPM and conversion rates. \uf0b7Human Feedback Points: oCreative asset sign-off oBudget re-allocation decisions oFinal compliance checks KPIs: \uf0b7CAC (prospect to new customer) \uf0b7Conversion Rate \uf0b7ROI (revenue vs. campaign spend) \uf0b7Engagement Metrics (QR code scans, click-through rates)', 'target_id': '67b5833b74e93a07d431bc3d', 'has_audience_model': 'yes'}
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^d  None
+#########################missing_params []
+######################### persona_summary
+conversation_id conversation_id 2eddf7b1-1f2b-45b3-9619-bdecf7afc4cf audience data False arthwll39k0kc4k8w8sc 1246
+INFO:     103.240.208.27:0 - "POST /api/v1/process HTTP/1.1" 200 OK
+2025-04-26 16:14:32,886 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:33,237 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:33,587 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:33,938 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:34,288 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:34,639 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:34,989 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:35,340 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:35,690 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:36,041 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:36,391 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:36,742 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:37,092 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:37,443 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:37,793 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:38,144 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:38,494 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:38,845 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:39,195 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:39,546 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:39,896 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:40,247 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:40,597 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:40,948 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:41,298 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:41,649 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:41,999 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:42,350 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:42,700 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:43,051 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:43,401 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:43,752 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:44,102 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:44,453 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:44,803 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:45,154 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:45,504 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:45,855 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:46,205 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:46,556 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:46,906 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:47,257 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:47,608 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:47,958 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:48,308 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:48,659 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:49,009 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:49,360 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:49,710 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:50,061 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:50,411 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:50,762 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:51,112 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:51,463 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:51,813 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:52,164 - watchfiles.main - INFO - 1 change detected
+2025-04-26 16:14:52,514 - watchfiles.main - INFO - 1 change detected
