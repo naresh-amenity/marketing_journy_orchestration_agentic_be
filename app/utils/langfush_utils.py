@@ -1,7 +1,8 @@
+import os
+
+from dotenv import load_dotenv
 from langfuse import Langfuse
 from langfuse.callback import CallbackHandler
-import os
-from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -9,19 +10,18 @@ LANGFUSE_PUBLIC_KEY = os.getenv("langfuse_public_key")
 LANGFUSE_SECRET_KEY = os.getenv("langfuse_secret_key")
 LANGFUSE_HOST = os.getenv("langfuse_host")
 
-langfuse  = Langfuse(
-    public_key=LANGFUSE_PUBLIC_KEY,
-    secret_key=LANGFUSE_SECRET_KEY,
-    host=LANGFUSE_HOST
+langfuse = Langfuse(
+    public_key=LANGFUSE_PUBLIC_KEY, secret_key=LANGFUSE_SECRET_KEY, host=LANGFUSE_HOST
 )
 
 langfuse_handler = CallbackHandler(
-    public_key=LANGFUSE_PUBLIC_KEY,
-    secret_key=LANGFUSE_SECRET_KEY,
-    host=LANGFUSE_HOST
+    public_key=LANGFUSE_PUBLIC_KEY, secret_key=LANGFUSE_SECRET_KEY, host=LANGFUSE_HOST
 )
 
-def upload_prompt(prompt_name, prompt_description, prompt_labels, prompt_config, prompt_json_schema):
+
+def upload_prompt(
+    prompt_name, prompt_description, prompt_labels, prompt_config, prompt_json_schema
+):
     """
     Example usage:
     prompt_name="tool selection prompt",
@@ -34,8 +34,9 @@ def upload_prompt(prompt_name, prompt_description, prompt_labels, prompt_config,
         name=prompt_name,
         prompt=prompt_description,
         config=prompt_config,
-        labels=prompt_labels
+        labels=prompt_labels,
     )
+
 
 def config_llm_callback(run_name, tag, conversation_id, user_id):
     config = {
@@ -43,10 +44,10 @@ def config_llm_callback(run_name, tag, conversation_id, user_id):
         "run_name": "journey_action_detection",
         "tags": [tag],
         "metadata": {
-        "langfuse_session_id": conversation_id,
-        "langfuse_user_id": user_id,
-        }
-        }
+            "langfuse_session_id": conversation_id,
+            "langfuse_user_id": user_id,
+        },
+    }
     return config
 
 

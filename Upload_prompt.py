@@ -1,24 +1,30 @@
-from langfuse import Langfuse
 import os
+
+from langfuse import Langfuse
 
 PUBLIC_KEY = os.getenv("langfuse_public_key")
 SECRET_KEY = os.getenv("langfuse_secret_key")
 HOST = os.getenv("langfuse_host")
 
 langfuse = Langfuse(
-  secret_key="sk-lf-b4325878-a1a8-469c-93c6-80266e2f40dc",
-  public_key="pk-lf-8168d95f-f80d-4cff-bd50-16b24101784e",
-  host="http://staging.geofactor.com:8002"
+    secret_key="sk-lf-b4325878-a1a8-469c-93c6-80266e2f40dc",
+    public_key="pk-lf-8168d95f-f80d-4cff-bd50-16b24101784e",
+    host="http://staging.geofactor.com:8002",
 )
 
-def upload_prompt(prompt_name, prompt_description, prompt_labels, prompt_config, prompt_json_schema):
+
+def upload_prompt(
+    prompt_name, prompt_description, prompt_labels, prompt_config, prompt_json_schema
+):
     print("111111111111111111")
     langfuse.create_prompt(
         name=prompt_name,
         prompt=prompt_description,
         config=prompt_config,
-        labels=prompt_labels
+        labels=prompt_labels,
     )
+
+
 # #================================prompt 1 tool selection================================
 
 # TOOL_SELECTION_PROMPT = """
@@ -65,7 +71,7 @@ def upload_prompt(prompt_name, prompt_description, prompt_labels, prompt_config,
 #    1) For persona data: Also require model_id, persona_name (optional: audience_id)
 #    2) For audience data: Also require audience_id (optional: model_id, persona_name)
 # - intent: email personalization creation
-   
+
 # ✅ Tool Name: directmail_personalization
 # - Use when: User explicitly requests personalized direct mail content
 # - let's create directmail personalization, create directmail personalization with persona data, create directmail personalization with audiance data
@@ -102,9 +108,9 @@ def upload_prompt(prompt_name, prompt_description, prompt_labels, prompt_config,
 #     prompt_config={"model": "gpt-4.1-2025-04-14", "temperature": 0, "json_schema": {}},
 #     prompt_json_schema="")
 
-#================================prompt 2 extraction prompt================================
+# ================================prompt 2 extraction prompt================================
 
-# extraction_prompt = """     
+# extraction_prompt = """
 #         This is user query with the old context: {query}
 
 #         From the last 50 messages understand the user's intent and previous parameter values.
@@ -113,7 +119,7 @@ def upload_prompt(prompt_name, prompt_description, prompt_labels, prompt_config,
 
 #         we have 4 actions create_journey, get_journey_status, get_journey_report, check_journey_report
 
-#         if there is problem statement in the context or the query, don't make tool desion from the problem statement, make tool desion from the provious context only 
+#         if there is problem statement in the context or the query, don't make tool desion from the problem statement, make tool desion from the provious context only
 #         Here is discription for all 4 actions
 #         create_journey: create new journy based on the user data
 #         get_journey_status: get the status of user journy
@@ -222,7 +228,7 @@ def upload_prompt(prompt_name, prompt_description, prompt_labels, prompt_config,
 #         }}
 #         }}
 
-#         """ 
+#         """
 
 # upload_prompt(
 #     prompt_name="problem statment analysis personalization",
@@ -294,7 +300,7 @@ def upload_prompt(prompt_name, prompt_description, prompt_labels, prompt_config,
 #             }}
 #         }}
 
-#         """ 
+#         """
 
 # upload_prompt(
 #     prompt_name="problem statment analysis journey",
@@ -643,7 +649,7 @@ def upload_prompt(prompt_name, prompt_description, prompt_labels, prompt_config,
 # #org_variable_name = genral_tamplate
 # general_tamplate_email = """
 #     You are tasked with creating a compelling generalized EMAIL marketing campaign that targets a diverse audience using a shared set of audience targeting insights. Instead of personalizing for a single persona, your goal is to write inclusive, engaging, action-oriented email content in a professional tone that resonates across multiple demographics.
-    
+
 #     Here’s the information you’re working with:
 #     <targeting_insights>
 #     {targeting_insights}
@@ -754,7 +760,7 @@ def upload_prompt(prompt_name, prompt_description, prompt_labels, prompt_config,
 #     You are tasked with creating a generalized digital email marketing campaign based on shared audience targeting insights. Your objective is to write inclusive and high-performing email content that speaks to a wide audience without segmenting by persona.
 
 #     This campaign will be distributed via email, and must be optimized for digital readers — including mobile users — while driving engagement and conversion.
-    
+
 #     Here’s the information you’re working with:
 #     <targeting_insights>
 #     {targeting_insights}
@@ -845,7 +851,7 @@ def upload_prompt(prompt_name, prompt_description, prompt_labels, prompt_config,
 #     "General_Email_Content": ["<Complete generalized email content>"]
 #     }}
 #     </output_format>
-  
+
 #     """
 
 # upload_prompt(
@@ -860,7 +866,7 @@ def upload_prompt(prompt_name, prompt_description, prompt_labels, prompt_config,
 # #org_variable_name = general_tamplate_digitalad
 # general_tamplate_digitalad = """
 #     You are tasked with developing a generalized digital ad marketing campaign using a set of broad audience targeting insights. This campaign will run across digital ad platforms (e.g., Google Ads, Meta Ads, Display banners), and should be visually and textually optimized for clicks, impressions, and conversions across a wide, non-segmented audience.
-    
+
 #     Use the following audience insights as your base:
 #     <targeting_insights>
 #     {targeting_insights}
@@ -947,7 +953,7 @@ def upload_prompt(prompt_name, prompt_description, prompt_labels, prompt_config,
 # Journey status messages use format: "Journey 'Name' (starting date):\n\nStatus: [status]"
 # Persona narratives use: "### Persona Narratives\n\n#### [Name]\n[Description]"
 # Email personalization uses: "### Email Personalization\n\n#### [Name]\n- [Category]\n\t- [Details]"
-    
+
 #         <output_format>
 #             {{
 #     "Offer": ["<2–3 value-focused ad offers>"],
@@ -957,7 +963,7 @@ def upload_prompt(prompt_name, prompt_description, prompt_labels, prompt_config,
 #     "Ad_Text_Content": ["<Optional full-length ad text for responsive/dynamic formats>"]
 #     }}
 #     </output_format>
-  
+
 #     """
 
 # upload_prompt(
@@ -965,84 +971,84 @@ def upload_prompt(prompt_name, prompt_description, prompt_labels, prompt_config,
 #     prompt_description=general_tamplate_digitalad,
 #     prompt_labels=["stage_v1"],
 #     prompt_config={"model": "gpt-4o", "temperature": 0, "json_schema": {"targeting_insights": "string", "problem_statement": "string"}},
-#     prompt_json_schema="")  
+#     prompt_json_schema="")
 
 # #================================prompt 12 journy tool 1================================
 
 # Journy_tool1 = """
-# You are a senior marketing strategist with over 30 years of experience. Your task is to design an effective **multi-channel customer journey** for a marketing campaign, ensuring that all actions align with the provided budget.  
+# You are a senior marketing strategist with over 30 years of experience. Your task is to design an effective **multi-channel customer journey** for a marketing campaign, ensuring that all actions align with the provided budget.
 
-#                 #### **Campaign Inputs:**  
-#                 <problem_statement>  
-#                 {problem_statement}  
-#                 </problem_statement>   
+#                 #### **Campaign Inputs:**
+#                 <problem_statement>
+#                 {problem_statement}
+#                 </problem_statement>
 
-#                 Total budget: **${total_budget}**  
-#                 Total audience: **{total_audience}**  
+#                 Total budget: **${total_budget}**
+#                 Total audience: **{total_audience}**
 
-#                 #### **Available Marketing Channels & Costs per User:**  
-#                 - **Email:** ${email_rate} per email  
-#                 - **Direct Mail:** ${direct_mail_rate} per mail  
-#                 - **Digital Ads:** 
+#                 #### **Available Marketing Channels & Costs per User:**
+#                 - **Email:** ${email_rate} per email
+#                 - **Direct Mail:** ${direct_mail_rate} per mail
+#                 - **Digital Ads:**
 #                     Online Video Ad :-
 #                         These are advertisements that appear in video format on digital platforms.
 #                         They can run before, during, or after video content (e.g., YouTube ads, Facebook video ads, or ads on streaming platforms like Hulu).
 #                         Types include skippable ads, non-skippable ads, bumper ads, and in-stream ads.
-                    
+
 #                     Display Ad :-
 #                         These are static or animated image-based ads that appear on websites and apps.
 #                         They come in different formats like banners, pop-ups, interstitial ads, and native ads.
 #                         They are usually placed on ad networks like Google Display Network.
-                        
+
 #                     ${digital_ad_rate} per thousand impression  for Display ad
 #                     ${digital_ad_rate_video} per thousand impression  for Online video ad
 
-#                 **Budget Allocation Condition:**  
-#                 1. **If `budget_of_each_channel` is provided** → Use the given allocation for each channel.  
-#                 2. **If `budget_of_each_channel` is `None`** → You must allocate the budget based on:  
-#                 - The **cost-effectiveness** of each channel.  
-#                 - The **problem statement** (e.g., urgent conversion goals may favor high-impact channels).  
+#                 **Budget Allocation Condition:**
+#                 1. **If `budget_of_each_channel` is provided** → Use the given allocation for each channel.
+#                 2. **If `budget_of_each_channel` is `None`** → You must allocate the budget based on:
+#                 - The **cost-effectiveness** of each channel.
+#                 - The **problem statement** (e.g., urgent conversion goals may favor high-impact channels).
 
 #                 ---
 
-#                 ### **Instructions for Campaign Journey Design**  
+#                 ### **Instructions for Campaign Journey Design**
 
-#                 1. **Select the Best Initial Marketing Channels**  
-#                 - Use **provided budget allocation** (if available).  
-#                 - If **budget allocation is missing**, create an **optimal budget split** based on cost-effectiveness and audience preferences.  
-#                 - Ensure that the **total campaign cost does not exceed `{total_budget}`**.  
+#                 1. **Select the Best Initial Marketing Channels**
+#                 - Use **provided budget allocation** (if available).
+#                 - If **budget allocation is missing**, create an **optimal budget split** based on cost-effectiveness and audience preferences.
+#                 - Ensure that the **total campaign cost does not exceed `{total_budget}`**.
 
-#                 2. **Define the Initial Customer Journey**  
-#                 - Start from the **"Audience" node**.  
-#                 - Define **first-touch marketing actions** using only the allowed channels:  
-#                     ✅ **Email**  
-#                     ✅ **Direct Mail**  
-#                     ✅ **Digital Ads**  
-#                 - Implement **data-driven segmentation** based on persona characteristics.  
+#                 2. **Define the Initial Customer Journey**
+#                 - Start from the **"Audience" node**.
+#                 - Define **first-touch marketing actions** using only the allowed channels:
+#                     ✅ **Email**
+#                     ✅ **Direct Mail**
+#                     ✅ **Digital Ads**
+#                 - Implement **data-driven segmentation** based on persona characteristics.
 
-#                 3. **Expected Output Format**  
-#                 - Provide a **point-wise breakdown** of the campaign journey.  
-#                 - Show how the **budget is distributed per channel**.  
-#                 - Clearly explain why each **channel is selected based on audience behavior**.  
+#                 3. **Expected Output Format**
+#                 - Provide a **point-wise breakdown** of the campaign journey.
+#                 - Show how the **budget is distributed per channel**.
+#                 - Clearly explain why each **channel is selected based on audience behavior**.
 
 #                 ---
 
-#                 ### **Example Output Structure**  
+#                 ### **Example Output Structure**
 #                 ```plaintext
-#                 1. **Budget Allocation Based on Available Information**  
-#                 - **Email:** $X allocated (Y% of total budget)  
-#                 - **Direct Mail:** $X allocated (Y% of total budget)  
-#                 - **Digital Ads:** $X allocated (Y% of total budget)  
+#                 1. **Budget Allocation Based on Available Information**
+#                 - **Email:** $X allocated (Y% of total budget)
+#                 - **Direct Mail:** $X allocated (Y% of total budget)
+#                 - **Digital Ads:** $X allocated (Y% of total budget)
 
-#                 2. **Initial Campaign Strategy**  
-#                 - **Chosen primary channel:** `selected_channel`  
-#                 - **First engagement action:** `e.g., email campaign with personalized subject lines`  
-#                 - **Supporting engagement actions:** `e.g., digital retargeting for users who clicked email`  
+#                 2. **Initial Campaign Strategy**
+#                 - **Chosen primary channel:** `selected_channel`
+#                 - **First engagement action:** `e.g., email campaign with personalized subject lines`
+#                 - **Supporting engagement actions:** `e.g., digital retargeting for users who clicked email`
 
-#                 3. **Cost Considerations & Justification**  
-#                 - **Budget is split based on persona behaviors and marketing priorities.**  
-#                 - **Each channel’s cost per user is factored into the decision-making process.**  
-#                 - **No action exceeds `{total_budget}`.**  
+#                 3. **Cost Considerations & Justification**
+#                 - **Budget is split based on persona behaviors and marketing priorities.**
+#                 - **Each channel’s cost per user is factored into the decision-making process.**
+#                 - **No action exceeds `{total_budget}`.**
 # """
 # upload_prompt(
 #     prompt_name="journey_tool_1_customer_uploaded_data_initial_campaign",
@@ -1056,79 +1062,79 @@ def upload_prompt(prompt_name, prompt_description, prompt_labels, prompt_config,
 # Journy_tool2 = """
 # You are an expert marketing strategist. Based on the initial campaign structure provided below, design a **detailed user re-engagement strategy** that ensures maximum conversions while staying within the allocated budget.
 
-#             #### **Initial Campaign Plan (from Part 1 Output):**  
-#             {part_1_output}  
+#             #### **Initial Campaign Plan (from Part 1 Output):**
+#             {part_1_output}
 
 #             ---
 
-#             ### **Instructions for Re-engagement Strategy Development**  
-            
-#             #### **1. Use Only the Provided Marketing Channels**  
-#             - **Allowed channels**:  
-#                 ✅ **Email** (`${email_rate} per email`)  
-#                 ✅ **Direct Mail** (`${direct_mail_rate} per mail`)  
-#                 ✅ **Digital Ads** 
+#             ### **Instructions for Re-engagement Strategy Development**
+
+#             #### **1. Use Only the Provided Marketing Channels**
+#             - **Allowed channels**:
+#                 ✅ **Email** (`${email_rate} per email`)
+#                 ✅ **Direct Mail** (`${direct_mail_rate} per mail`)
+#                 ✅ **Digital Ads**
 #                 Online Video Ad :-
 #                     These are advertisements that appear in video format on digital platforms.
 #                     They can run before, during, or after video content (e.g., YouTube ads, Facebook video ads, or ads on streaming platforms like Hulu).
 #                     Types include skippable ads, non-skippable ads, bumper ads, and in-stream ads.
-                
+
 #                 Display Ad :-
 #                     These are static or animated image-based ads that appear on websites and apps.
 #                     They come in different formats like banners, pop-ups, interstitial ads, and native ads.
 #                     They are usually placed on ad networks like Google Display Network.
-#                 (`${digital_ad_rate} per thousand impression` for Display ad) 
+#                 (`${digital_ad_rate} per thousand impression` for Display ad)
 #                 ( ${digital_ad_rate_video} per thousand impression  for Online video ad)
-#             - ❌ **Do not use any other marketing channels** outside of this list.  
+#             - ❌ **Do not use any other marketing channels** outside of this list.
 
 #             #### **2. Responce Rate**
 #                 - **Email Response Rate:** 3.5%
 #                 - **Direct Mail Response Rate:** 2-3%
 #                 - **Digital Ads Response Rate:** 3%
-            
-#             #### **3. Re-engagement Strategy Design**  
-#             - **Identify key user segments that need re-engagement** (e.g., user who have clicked on the email 2 time retarget them so they will convert or user who ahve not open the mail).  
-#             - **Use the following journey components to drive engagement**:  
+
+#             #### **3. Re-engagement Strategy Design**
+#             - **Identify key user segments that need re-engagement** (e.g., user who have clicked on the email 2 time retarget them so they will convert or user who ahve not open the mail).
+#             - **Use the following journey components to drive engagement**:
 #                 - **Event Filter**: Trigger follow-ups based on user actions. [provideds the condition like user click email click event or qr code scan and many more events.]
-#                 - **Wait Node**: Introduce strategic delays for better timing.  
-#                 - **Batch Node**: Group audience for cost-effective execution.  
-#                 - **A/B Test**: Optimize messaging by testing different approaches.  
-#                 - **Schedule Node**: Schedule re-engagement messages at optimal times.  
+#                 - **Wait Node**: Introduce strategic delays for better timing.
+#                 - **Batch Node**: Group audience for cost-effective execution.
+#                 - **A/B Test**: Optimize messaging by testing different approaches.
+#                 - **Schedule Node**: Schedule re-engagement messages at optimal times.
 
-#             #### **4. Budget Management & Cost Allocation**  
-#             - Ensure that the **total cost of all actions (initial campaign + re-engagement) does not exceed `{total_budget}`**.  
-#             - Prioritize the **most cost-effective re-engagement channels** based on their response rates:  
-#                 - **Email** (most cost-effective but lower engagement).  
-#                 - **Direct Mail** (higher engagement but expensive).  
-#                 - **Digital Ads** (expensive, use selectively).  
-#             - **If the budget is tight**, limit expensive actions and optimize user segmentation.  
+#             #### **4. Budget Management & Cost Allocation**
+#             - Ensure that the **total cost of all actions (initial campaign + re-engagement) does not exceed `{total_budget}`**.
+#             - Prioritize the **most cost-effective re-engagement channels** based on their response rates:
+#                 - **Email** (most cost-effective but lower engagement).
+#                 - **Direct Mail** (higher engagement but expensive).
+#                 - **Digital Ads** (expensive, use selectively).
+#             - **If the budget is tight**, limit expensive actions and optimize user segmentation.
 
-#             #### **5. Expected Output Format**  
-#             - Provide a **point-wise breakdown** of the re-engagement plan.  
-#             - Clearly define **which audience segments** receive which marketing actions.  
-#             - Justify each action **based on budget efficiency and expected response rates**.  
+#             #### **5. Expected Output Format**
+#             - Provide a **point-wise breakdown** of the re-engagement plan.
+#             - Clearly define **which audience segments** receive which marketing actions.
+#             - Justify each action **based on budget efficiency and expected response rates**.
 
 #             - We need to make sure that Initial Campaign and the Re-engagement Campaign which we are preparing both are linked. Prepare the final Campaign which starts with the Initial Campaign and then Re-engagement Campaign will kick off based on the user click events.
 
 #             - based on the buget we have make sure to have strong Re-engagement Campaign to garantte user conversation rate.
 #             ---
 
-#             ### **Example Format of the Response**  
+#             ### **Example Format of the Response**
 #             ```plaintext
-#             1. **Re-engagement Campaign**  
-#             - **Trigger:** Users who did not open the first email (Event Filter).  
-#             - **Action:** Send a follow-up email after a 48-hour wait (Email Node).  
-#             - **Cost Consideration:** $0.003 per email, minimal impact on budget.  
+#             1. **Re-engagement Campaign**
+#             - **Trigger:** Users who did not open the first email (Event Filter).
+#             - **Action:** Send a follow-up email after a 48-hour wait (Email Node).
+#             - **Cost Consideration:** $0.003 per email, minimal impact on budget.
 
-#             2. **Re-engagement for Engaged but Not Converted Users**  
-#             - **Trigger:** Users who clicked the email but did not purchase (Event Filter).  
-#             - **Action:** Retarget with a **digital ad** (Digital Ads Node).  
-#             - **Cost Consideration:** Digital ads are expensive ($10 per ad), use only for high-potential leads.  
+#             2. **Re-engagement for Engaged but Not Converted Users**
+#             - **Trigger:** Users who clicked the email but did not purchase (Event Filter).
+#             - **Action:** Retarget with a **digital ad** (Digital Ads Node).
+#             - **Cost Consideration:** Digital ads are expensive ($10 per ad), use only for high-potential leads.
 
-#             3. **Final Attempt for Cold Leads**  
-#             - **Trigger:** Users who ignored both email and digital ads (Event Filter).  
-#             - **Action:** Send a final **direct mail** with a discount offer (Direct Mail Node).  
-#             - **Cost Consideration:** $0.80 per mail; limit to high-value potential customers only. 
+#             3. **Final Attempt for Cold Leads**
+#             - **Trigger:** Users who ignored both email and digital ads (Event Filter).
+#             - **Action:** Send a final **direct mail** with a discount offer (Direct Mail Node).
+#             - **Cost Consideration:** $0.80 per mail; limit to high-value potential customers only.
 # """
 # upload_prompt(
 #     prompt_name="journey_tool_2_customer_uploaded_data_re_engagement",
@@ -1150,23 +1156,23 @@ def upload_prompt(prompt_name, prompt_description, prompt_labels, prompt_config,
 #             ### **Instructions for Technical Journey Mapping**
 
 #             #### **1. Journey Structure Requirements**
-#             - The journey must **start with an "Audience" node**.  
+#             - The journey must **start with an "Audience" node**.
 #             - **All journeys branches MUST END with a channel node** (Email, Direct Mail, or Digital Ads)
 #             - **Never end a journey with a decision node, filter, or wait node**
 #             - **Maximum of 3 distinct path branches** per journey to maintain clarity
 
 #             #### **2. Correct Node Usage**
-#             - **Wait Node**: 
+#             - **Wait Node**:
 #             - Use ONLY when timing is critical (e.g., 24-48 hour delays between messages)
 #             - Do NOT use wait nodes as default between every action
 #             - Specify exact wait duration (hours/days)
-#             - Make sure in the planning putting Wait node directly after the artibute filter don't serve any perpous we need to use Wait node in the re engagement campaign 
+#             - Make sure in the planning putting Wait node directly after the artibute filter don't serve any perpous we need to use Wait node in the re engagement campaign
 
 #             - **Batch Node**:
 #             - Use when multiple users need to be processed together
 #             - Specify batch criteria (e.g., "Daily batch at 9 AM ET" or "Weekly batch on Mondays")
 #             - Explain why batching is necessary for this segment
-#             - Make sure in the planning putting batch node directly after the artibute filter don't serve any perpous we need to use batch node in the re engagement campaign 
+#             - Make sure in the planning putting batch node directly after the artibute filter don't serve any perpous we need to use batch node in the re engagement campaign
 
 #             - **A/B Test Node**:
 #             - Use ONLY when testing two distinct approaches
@@ -1274,85 +1280,85 @@ def upload_prompt(prompt_name, prompt_description, prompt_labels, prompt_config,
 # #================================prompt 15 journy tool 1================================
 
 # Journy_tool1 = """
-# You are a senior marketing strategist with over 30 years of experience. Your task is to design an effective **multi-channel customer journey** for a marketing campaign, ensuring that all actions align with the provided budget and persona details.  
+# You are a senior marketing strategist with over 30 years of experience. Your task is to design an effective **multi-channel customer journey** for a marketing campaign, ensuring that all actions align with the provided budget and persona details.
 
-#                 #### **Campaign Inputs:**  
-#                 <problem_statement>  
-#                 {problem_statement}  
-#                 </problem_statement>  
+#                 #### **Campaign Inputs:**
+#                 <problem_statement>
+#                 {problem_statement}
+#                 </problem_statement>
 
-#                 <persona_summary>  
-#                 {persona_summary}  
-#                 </persona_summary>  
+#                 <persona_summary>
+#                 {persona_summary}
+#                 </persona_summary>
 
-#                 Total budget: **${total_budget}**  
-#                 Total audience: **{total_audience}**  
+#                 Total budget: **${total_budget}**
+#                 Total audience: **{total_audience}**
 
-#                 #### **Available Marketing Channels & Costs per User:**  
-#                 - **Email:** ${email_rate} per email  
-#                 - **Direct Mail:** ${direct_mail_rate} per mail  
-#                 - **Digital Ads:** 
+#                 #### **Available Marketing Channels & Costs per User:**
+#                 - **Email:** ${email_rate} per email
+#                 - **Direct Mail:** ${direct_mail_rate} per mail
+#                 - **Digital Ads:**
 #                     Online Video Ad :-
 #                         These are advertisements that appear in video format on digital platforms.
 #                         They can run before, during, or after video content (e.g., YouTube ads, Facebook video ads, or ads on streaming platforms like Hulu).
 #                         Types include skippable ads, non-skippable ads, bumper ads, and in-stream ads.
-                    
+
 #                     Display Ad :-
 #                         These are static or animated image-based ads that appear on websites and apps.
 #                         They come in different formats like banners, pop-ups, interstitial ads, and native ads.
 #                         They are usually placed on ad networks like Google Display Network.
-                        
+
 #                     ${digital_ad_rate} per thousand impression  for Display ad
 #                     ${digital_ad_rate_video} per thousand impression  for Online video ad
 
-#                 **Budget Allocation Condition:**  
-#                 1. **If `budget_of_each_channel` is provided** → Use the given allocation for each channel.  
-#                 2. **If `budget_of_each_channel` is `None`** → You must allocate the budget based on:  
-#                 - The **cost-effectiveness** of each channel.  
-#                 - The **persona summary** (e.g., digital-first users may get more email & ads, offline users may get direct mail).  
-#                 - The **problem statement** (e.g., urgent conversion goals may favor high-impact channels).  
+#                 **Budget Allocation Condition:**
+#                 1. **If `budget_of_each_channel` is provided** → Use the given allocation for each channel.
+#                 2. **If `budget_of_each_channel` is `None`** → You must allocate the budget based on:
+#                 - The **cost-effectiveness** of each channel.
+#                 - The **persona summary** (e.g., digital-first users may get more email & ads, offline users may get direct mail).
+#                 - The **problem statement** (e.g., urgent conversion goals may favor high-impact channels).
 
 #                 ---
 
-#                 ### **Instructions for Campaign Journey Design**  
+#                 ### **Instructions for Campaign Journey Design**
 
-#                 1. **Select the Best Initial Marketing Channels**  
-#                 - Use **provided budget allocation** (if available).  
-#                 - If **budget allocation is missing**, create an **optimal budget split** based on cost-effectiveness and audience preferences.  
-#                 - Ensure that the **total campaign cost does not exceed `{total_budget}`**.  
+#                 1. **Select the Best Initial Marketing Channels**
+#                 - Use **provided budget allocation** (if available).
+#                 - If **budget allocation is missing**, create an **optimal budget split** based on cost-effectiveness and audience preferences.
+#                 - Ensure that the **total campaign cost does not exceed `{total_budget}`**.
 
-#                 2. **Define the Initial Customer Journey**  
-#                 - Start from the **"Audience" node**.  
-#                 - Define **first-touch marketing actions** using only the allowed channels:  
-#                     ✅ **Email**  
-#                     ✅ **Direct Mail**  
-#                     ✅ **Digital Ads**  
-#                 - Implement **data-driven segmentation** based on persona characteristics.  
+#                 2. **Define the Initial Customer Journey**
+#                 - Start from the **"Audience" node**.
+#                 - Define **first-touch marketing actions** using only the allowed channels:
+#                     ✅ **Email**
+#                     ✅ **Direct Mail**
+#                     ✅ **Digital Ads**
+#                 - Implement **data-driven segmentation** based on persona characteristics.
 
-#                 3. **Expected Output Format**  
-#                 - Provide a **point-wise breakdown** of the campaign journey.  
-#                 - Show how the **budget is distributed per channel**.  
-#                 - Clearly explain why each **channel is selected based on audience behavior**.  
+#                 3. **Expected Output Format**
+#                 - Provide a **point-wise breakdown** of the campaign journey.
+#                 - Show how the **budget is distributed per channel**.
+#                 - Clearly explain why each **channel is selected based on audience behavior**.
 
 #                 ---
 
-#                 ### **Example Output Structure**  
+#                 ### **Example Output Structure**
 #                 ```plaintext
-#                 1. **Budget Allocation Based on Available Information**  
-#                 - **Email:** $X allocated (Y% of total budget)  
-#                 - **Direct Mail:** $X allocated (Y% of total budget)  
-#                 - **Digital Ads:** $X allocated (Y% of total budget)  
+#                 1. **Budget Allocation Based on Available Information**
+#                 - **Email:** $X allocated (Y% of total budget)
+#                 - **Direct Mail:** $X allocated (Y% of total budget)
+#                 - **Digital Ads:** $X allocated (Y% of total budget)
 
-#                 2. **Initial Campaign Strategy**  
-#                 - **Target audience:** `{persona_summary}`  
-#                 - **Chosen primary channel:** `selected_channel`  
-#                 - **First engagement action:** `e.g., email campaign with personalized subject lines`  
-#                 - **Supporting engagement actions:** `e.g., digital retargeting for users who clicked email`  
+#                 2. **Initial Campaign Strategy**
+#                 - **Target audience:** `{persona_summary}`
+#                 - **Chosen primary channel:** `selected_channel`
+#                 - **First engagement action:** `e.g., email campaign with personalized subject lines`
+#                 - **Supporting engagement actions:** `e.g., digital retargeting for users who clicked email`
 
-#                 3. **Cost Considerations & Justification**  
-#                 - **Budget is split based on persona behaviors and marketing priorities.**  
-#                 - **Each channel’s cost per user is factored into the decision-making process.**  
-#                 - **No action exceeds `{total_budget}`.**  
+#                 3. **Cost Considerations & Justification**
+#                 - **Budget is split based on persona behaviors and marketing priorities.**
+#                 - **Each channel’s cost per user is factored into the decision-making process.**
+#                 - **No action exceeds `{total_budget}`.**
 # """
 # upload_prompt(
 #     prompt_name="journey_tool_1_propensity_data_initial_campaign",
@@ -1366,76 +1372,76 @@ def upload_prompt(prompt_name, prompt_description, prompt_labels, prompt_config,
 # Journy_tool2 = """
 # You are an expert marketing strategist. Based on the initial campaign structure provided below, design a **detailed user re-engagement strategy** that ensures maximum conversions while staying within the allocated budget.
 
-#             #### **Initial Campaign Plan (from Part 1 Output):**  
-#             {part_1_output}  
+#             #### **Initial Campaign Plan (from Part 1 Output):**
+#             {part_1_output}
 
 #             ---
 
-#             ### **Instructions for Re-engagement Strategy Development**  
-            
-#             #### **1. Use Only the Provided Marketing Channels**  
-#             - **Allowed channels**:  
-#                 ✅ **Email** (`${email_rate} per email`)  
-#                 ✅ **Direct Mail** (`${direct_mail_rate} per mail`)  
-#                 ✅ **Digital Ads** 
+#             ### **Instructions for Re-engagement Strategy Development**
+
+#             #### **1. Use Only the Provided Marketing Channels**
+#             - **Allowed channels**:
+#                 ✅ **Email** (`${email_rate} per email`)
+#                 ✅ **Direct Mail** (`${direct_mail_rate} per mail`)
+#                 ✅ **Digital Ads**
 #                 Online Video Ad :-
 #                     These are advertisements that appear in video format on digital platforms.
 #                     They can run before, during, or after video content (e.g., YouTube ads, Facebook video ads, or ads on streaming platforms like Hulu).
 #                     Types include skippable ads, non-skippable ads, bumper ads, and in-stream ads.
-                
+
 #                 Display Ad :-
 #                     These are static or animated image-based ads that appear on websites and apps.
 #                     They come in different formats like banners, pop-ups, interstitial ads, and native ads.
 #                     They are usually placed on ad networks like Google Display Network.
-#                 (`${digital_ad_rate} per thousand impression` for Display ad) 
+#                 (`${digital_ad_rate} per thousand impression` for Display ad)
 #                 ( ${digital_ad_rate_video} per thousand impression  for Online video ad)
-#             - ❌ **Do not use any other marketing channels** outside of this list.  
+#             - ❌ **Do not use any other marketing channels** outside of this list.
 
 #             #### **2. Responce Rate**
 #                 - **Email Response Rate:** 3.5%
 #                 - **Direct Mail Response Rate:** 2-3%
 #                 - **Digital Ads Response Rate:** {count}
-            
-#             #### **3. Re-engagement Strategy Design**  
-#             - **Identify key user segments that need re-engagement** (e.g., users who did not respond, abandoned cart users, inactive subscribers).  
-#             - **Use the following journey components to drive engagement**:  
-#                 - **Event Filter**: Trigger follow-ups based on user actions.  
-#                 - **Wait Node**: Introduce strategic delays for better timing.  
-#                 - **Batch Node**: Group audience for cost-effective execution.  
-#                 - **A/B Test**: Optimize messaging by testing different approaches.  
-#                 - **Schedule Node**: Schedule re-engagement messages at optimal times.  
 
-#             #### **4. Budget Management & Cost Allocation**  
-#             - Ensure that the **total cost of all actions (initial campaign + re-engagement) does not exceed `{total_budget}`**.  
-#             - Prioritize the **most cost-effective re-engagement channels** based on their response rates:  
-#                 - **Email** (most cost-effective but lower engagement).  
-#                 - **Direct Mail** (higher engagement but expensive).  
-#                 - **Digital Ads** (expensive, use selectively).  
-#             - **If the budget is tight**, limit expensive actions and optimize user segmentation.  
+#             #### **3. Re-engagement Strategy Design**
+#             - **Identify key user segments that need re-engagement** (e.g., users who did not respond, abandoned cart users, inactive subscribers).
+#             - **Use the following journey components to drive engagement**:
+#                 - **Event Filter**: Trigger follow-ups based on user actions.
+#                 - **Wait Node**: Introduce strategic delays for better timing.
+#                 - **Batch Node**: Group audience for cost-effective execution.
+#                 - **A/B Test**: Optimize messaging by testing different approaches.
+#                 - **Schedule Node**: Schedule re-engagement messages at optimal times.
 
-#             #### **5. Expected Output Format**  
-#             - Provide a **point-wise breakdown** of the re-engagement plan.  
-#             - Clearly define **which audience segments** receive which marketing actions.  
-#             - Justify each action **based on budget efficiency and expected response rates**.  
+#             #### **4. Budget Management & Cost Allocation**
+#             - Ensure that the **total cost of all actions (initial campaign + re-engagement) does not exceed `{total_budget}`**.
+#             - Prioritize the **most cost-effective re-engagement channels** based on their response rates:
+#                 - **Email** (most cost-effective but lower engagement).
+#                 - **Direct Mail** (higher engagement but expensive).
+#                 - **Digital Ads** (expensive, use selectively).
+#             - **If the budget is tight**, limit expensive actions and optimize user segmentation.
+
+#             #### **5. Expected Output Format**
+#             - Provide a **point-wise breakdown** of the re-engagement plan.
+#             - Clearly define **which audience segments** receive which marketing actions.
+#             - Justify each action **based on budget efficiency and expected response rates**.
 
 #             ---
 
-#             ### **Example Format of the Response**  
+#             ### **Example Format of the Response**
 #             ```plaintext
-#             1. **Re-engagement for Non-Responders**  
-#             - **Trigger:** Users who did not open the first email (Event Filter).  
-#             - **Action:** Send a follow-up email after a 48-hour wait (Email Node).  
-#             - **Cost Consideration:** $0.003 per email, minimal impact on budget.  
+#             1. **Re-engagement for Non-Responders**
+#             - **Trigger:** Users who did not open the first email (Event Filter).
+#             - **Action:** Send a follow-up email after a 48-hour wait (Email Node).
+#             - **Cost Consideration:** $0.003 per email, minimal impact on budget.
 
-#             2. **Re-engagement for Engaged but Not Converted Users**  
-#             - **Trigger:** Users who clicked the email but did not purchase (Event Filter).  
-#             - **Action:** Retarget with a **digital ad** (Digital Ads Node).  
-#             - **Cost Consideration:** Digital ads are expensive ($10 per ad), use only for high-potential leads.  
+#             2. **Re-engagement for Engaged but Not Converted Users**
+#             - **Trigger:** Users who clicked the email but did not purchase (Event Filter).
+#             - **Action:** Retarget with a **digital ad** (Digital Ads Node).
+#             - **Cost Consideration:** Digital ads are expensive ($10 per ad), use only for high-potential leads.
 
-#             3. **Final Attempt for Cold Leads**  
-#             - **Trigger:** Users who ignored both email and digital ads (Event Filter).  
-#             - **Action:** Send a final **direct mail** with a discount offer (Direct Mail Node).  
-#             - **Cost Consideration:** $0.80 per mail; limit to high-value potential customers only. 
+#             3. **Final Attempt for Cold Leads**
+#             - **Trigger:** Users who ignored both email and digital ads (Event Filter).
+#             - **Action:** Send a final **direct mail** with a discount offer (Direct Mail Node).
+#             - **Cost Consideration:** $0.80 per mail; limit to high-value potential customers only.
 # """
 # upload_prompt(
 #     prompt_name="journey_tool_2_propensity_data_re_engagement",
@@ -1463,17 +1469,17 @@ def upload_prompt(prompt_name, prompt_description, prompt_labels, prompt_config,
 #             - **Maximum of 3 distinct path branches** per journey to maintain clarity
 
 #             #### **2. Correct Node Usage**
-#             - **Wait Node**: 
+#             - **Wait Node**:
 #             - Use ONLY when timing is critical (e.g., 24-48 hour delays between messages)
 #             - Do NOT use wait nodes as default between every action
 #             - Specify exact wait duration (hours/days)
-#             - Make sure in the planning putting Wait node directly after the artibute filter don't serve any perpous we need to use Wait node in the re engagement campaign 
+#             - Make sure in the planning putting Wait node directly after the artibute filter don't serve any perpous we need to use Wait node in the re engagement campaign
 
 #             - **Batch Node**:
 #             - Use when multiple users need to be processed together
 #             - Specify batch criteria (e.g., "Daily batch at 9 AM ET" or "Weekly batch on Mondays")
 #             - Explain why batching is necessary for this segment
-#             - Make sure in the planning putting batch node directly after the artibute filter don't serve any perpous we need to use batch node in the re engagement campaign 
+#             - Make sure in the planning putting batch node directly after the artibute filter don't serve any perpous we need to use batch node in the re engagement campaign
 
 #             - **A/B Test Node**:
 #             - Use ONLY when testing two distinct approaches
@@ -1486,7 +1492,7 @@ def upload_prompt(prompt_name, prompt_description, prompt_labels, prompt_config,
 #             - Use to segment based on specific user actions
 #             - Clearly define the condition being evaluated
 #             - Event node only comes after the marketing channel like the email, directmail or digital ad it will not come at starting or end.
-            
+
 
 #             #### **3. Channel Selection Logic**
 #             - For each channel node (Email, Direct Mail, Digital Ads):
@@ -1573,5 +1579,10 @@ upload_prompt(
     prompt_name="journey_tool_4_propensity_data_data_formatting",
     prompt_description=Journy_tool4,
     prompt_labels=["stage_v1"],
-    prompt_config={"model": "claude-3-7-sonnet-latest", "temperature": 0, "json_schema": {}},
-    prompt_json_schema="")
+    prompt_config={
+        "model": "claude-3-7-sonnet-latest",
+        "temperature": 0,
+        "json_schema": {},
+    },
+    prompt_json_schema="",
+)

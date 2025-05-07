@@ -1,17 +1,18 @@
-import requests
 import json
-import pandas as pd
-from io import StringIO
-import random
-from typing import Dict, List, Optional, Any
-from dotenv import load_dotenv
-import os
-from langchain_openai import ChatOpenAI
-from langchain_core.output_parsers import JsonOutputParser
-from langchain_core.pydantic_v1 import BaseModel, Field
-from langchain_core.prompts import PromptTemplate
 import logging
+import os
+import random
 from datetime import datetime
+from io import StringIO
+from typing import Any, Dict, List, Optional
+
+import pandas as pd
+import requests
+from dotenv import load_dotenv
+from langchain_core.output_parsers import JsonOutputParser
+from langchain_core.prompts import PromptTemplate
+from langchain_core.pydantic_v1 import BaseModel, Field
+from langchain_openai import ChatOpenAI
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -23,16 +24,18 @@ load_dotenv()
 # Get OpenAI API key from environment
 OPENAI_API_KEY = os.getenv("openai_key")
 
+
 def print_separator(message):
     """
     Print a separator line with a message for clearer console output
-    
+
     Args:
         message (str): The message to display
     """
     print("-" * 80)
     print(message)
     print("-" * 80)
+
 
 def get_user_search_history(user_id, SESSION_TOKEN, page=1, limits=10):
     """
@@ -54,7 +57,7 @@ def get_user_search_history(user_id, SESSION_TOKEN, page=1, limits=10):
         "skip": 0,
         "sort": ["created_at", -1],
         "userID": user_id,
-        "session_token": SESSION_TOKEN
+        "session_token": SESSION_TOKEN,
     }
 
     try:
@@ -62,9 +65,7 @@ def get_user_search_history(user_id, SESSION_TOKEN, page=1, limits=10):
             url,
             json=body,
             params={"page": page},
-            headers={
-                "Content-Type": "application/json"
-            }
+            headers={"Content-Type": "application/json"},
         )
 
         response.raise_for_status()
@@ -76,6 +77,7 @@ def get_user_search_history(user_id, SESSION_TOKEN, page=1, limits=10):
     except json.JSONDecodeError as e:
         logger.error(f"Error decoding JSON response: {str(e)}")
         return None
+
 
 def find_audience_by_id(user_id, SESSION_TOKEN, target_id, max_pages=None):
     """
@@ -91,55 +93,61 @@ def find_audience_by_id(user_id, SESSION_TOKEN, target_id, max_pages=None):
         dict or None: The audience data if found, otherwise None.
     """
     current_page = 1
-    
+
     try:
         # Get first page to determine total pages
-        first_response = get_user_search_history(user_id, SESSION_TOKEN, page=current_page)
-        
+        first_response = get_user_search_history(
+            user_id, SESSION_TOKEN, page=current_page
+        )
+
         if not first_response:
             logger.error("Failed to get initial response")
             # Return a dummy object with sample CSV data
             return {
                 "_id": target_id,
                 "fileURL": "dummy_url",
-                "csv_data": "id,name,address,age,condition\n1,John Doe,Anytown,40,diabetes\n2,Jane Smith,Othertown,25,asthma\n3,Alice Johnson,Anytown,50,hypertension\n4,Bob Brown,Anytown,60,diabetes"
+                "csv_data": "id,name,address,age,condition\n1,John Doe,Anytown,40,diabetes\n2,Jane Smith,Othertown,25,asthma\n3,Alice Johnson,Anytown,50,hypertension\n4,Bob Brown,Anytown,60,diabetes",
             }
-        
+
         # First check the first page
-        audiences = first_response.get('data', [])
+        audiences = first_response.get("data", [])
         for audience in audiences:
-            if audience.get('_id') == target_id:
+            if audience.get("_id") == target_id:
                 logger.info(f"Found audience on page {current_page}")
                 return audience
-        
+
         # Determine how many pages to search
-        last_page = first_response.get('last_page', 1)
+        last_page = first_response.get("last_page", 1)
         if max_pages is not None:
             last_page = min(last_page, max_pages)
-        
+
         logger.info(f"Searching through {last_page} pages for audience ID: {target_id}")
-        
+
         # Continue with remaining pages
         for current_page in range(2, last_page + 1):
             logger.info(f"Checking page {current_page}...")
-            response = get_user_search_history(user_id, SESSION_TOKEN, page=current_page)
-            
+            response = get_user_search_history(
+                user_id, SESSION_TOKEN, page=current_page
+            )
+
             if not response:
                 logger.error(f"Failed to get response for page {current_page}")
                 continue
-            
-            audiences = response.get('data', [])
+
+            audiences = response.get("data", [])
             for audience in audiences:
-                if audience.get('_id') == target_id:
+                if audience.get("_id") == target_id:
                     logger.info(f"Found audience on page {current_page}")
                     return audience
-        
-        logger.error(f"Audience with ID {target_id} not found after searching {last_page} pages")
+
+        logger.error(
+            f"Audience with ID {target_id} not found after searching {last_page} pages"
+        )
         # Return a dummy object with sample CSV data
         return {
             "_id": target_id,
             "fileURL": "dummy_url",
-            "csv_data": "id,name,address,age,condition\n1,John Doe,Anytown,40,diabetes\n2,Jane Smith,Othertown,25,asthma\n3,Alice Johnson,Anytown,50,hypertension\n4,Bob Brown,Anytown,60,diabetes"
+            "csv_data": "id,name,address,age,condition\n1,John Doe,Anytown,40,diabetes\n2,Jane Smith,Othertown,25,asthma\n3,Alice Johnson,Anytown,50,hypertension\n4,Bob Brown,Anytown,60,diabetes",
         }
     except Exception as e:
         logger.error(f"Error in find_audience_by_id: {str(e)}")
@@ -147,10 +155,13 @@ def find_audience_by_id(user_id, SESSION_TOKEN, target_id, max_pages=None):
         return {
             "_id": target_id,
             "fileURL": "dummy_url",
-            "csv_data": "id,name,address,age,condition\n1,John Doe,Anytown,40,diabetes\n2,Jane Smith,Othertown,25,asthma\n3,Alice Johnson,Anytown,50,hypertension\n4,Bob Brown,Anytown,60,diabetes"
+            "csv_data": "id,name,address,age,condition\n1,John Doe,Anytown,40,diabetes\n2,Jane Smith,Othertown,25,asthma\n3,Alice Johnson,Anytown,50,hypertension\n4,Bob Brown,Anytown,60,diabetes",
         }
 
-def analyze_csv_columns(file_path, column_list=None, is_propensity_data=False, rows="All", seed=42):
+
+def analyze_csv_columns(
+    file_path, column_list=None, is_propensity_data=False, rows="All", seed=42
+):
     """
     Analyzes a CSV file and determines the data types of specified columns.
 
@@ -174,17 +185,18 @@ def analyze_csv_columns(file_path, column_list=None, is_propensity_data=False, r
             else:
                 total_rows = sum(1 for _ in open(file_path)) - 1
                 df = pd.read_csv(StringIO(file_path))
-                df['propensity_percentile'] = pd.to_numeric(
-                    df['propensity_percentile'], errors='coerce')
-                df = df.dropna(subset=['propensity_percentile'])
-                df = df[df['propensity_percentile'].between(0, 100)]
-                df = df.sort_values('propensity_percentile', ascending=False)
+                df["propensity_percentile"] = pd.to_numeric(
+                    df["propensity_percentile"], errors="coerce"
+                )
+                df = df.dropna(subset=["propensity_percentile"])
+                df = df[df["propensity_percentile"].between(0, 100)]
+                df = df.sort_values("propensity_percentile", ascending=False)
 
                 if total_rows > rows:
                     df = df.head(int(rows))
 
             df.columns = map(str.lower, df.columns)
-            
+
         else:
             logger.info("Processing standard data")
             if rows == "All" or rows == "all":
@@ -194,13 +206,14 @@ def analyze_csv_columns(file_path, column_list=None, is_propensity_data=False, r
                 total_rows = sum(1 for _ in open(file_path)) - 1
                 if total_rows > rows:
                     skip_rows = random.sample(
-                        range(1, total_rows + 1), total_rows - rows)
+                        range(1, total_rows + 1), total_rows - rows
+                    )
                     df = pd.read_csv(StringIO(file_path), skiprows=skip_rows)
                 else:
                     df = pd.read_csv(StringIO(file_path))
 
             df.columns = map(str.lower, df.columns)
-        
+
         # Determine which columns to process
         if column_list and len(column_list) > 0:
             column_list_lower = [col.lower() for col in column_list]
@@ -211,69 +224,59 @@ def analyze_csv_columns(file_path, column_list=None, is_propensity_data=False, r
 
         user_upload_column_data = []
         logger.info(f"Extracting types for {len(columns_to_process)} columns")
-        
+
         for column in columns_to_process:
-            obj = None  
+            obj = None
             try:
-                if df[column].dtype == 'object':
+                if df[column].dtype == "object":
                     if len(df[column].unique()) <= 150:
                         obj = {
                             "column": column,
                             "values": df[column].unique().tolist(),
-                            "data_type": "str"
+                            "data_type": "str",
                         }
                     else:
-                        obj = {
-                            "column": column,
-                            "data_type": "str"
-                        }
+                        obj = {"column": column, "data_type": "str"}
 
-                elif df[column].dtype == 'int64':
+                elif df[column].dtype == "int64":
                     obj = {
                         "column": column,
                         "max": float(df[column].max()),
                         "min": float(df[column].min()),
-                        "data_type": "int"
+                        "data_type": "int",
                     }
 
-                elif df[column].dtype == 'float64':
+                elif df[column].dtype == "float64":
                     obj = {
                         "column": column,
                         "max": float(df[column].max()),
                         "min": float(df[column].min()),
-                        "data_type": "float"
+                        "data_type": "float",
                     }
 
-                elif df[column].dtype == 'bool':
+                elif df[column].dtype == "bool":
                     obj = {
                         "column": column,
                         "values": df[column].unique().tolist(),
-                        "data_type": "bool"
+                        "data_type": "bool",
                     }
 
                 elif pd.api.types.is_datetime64_any_dtype(df[column]):
                     obj = {
                         "column": column,
-                        "values": df[column].dt.strftime('%Y-%m-%d').unique().tolist(),
-                        "data_type": "datetime"
+                        "values": df[column].dt.strftime("%Y-%m-%d").unique().tolist(),
+                        "data_type": "datetime",
                     }
 
                 else:
-                    obj = {
-                        "column": column,
-                        "data_type": str(df[column].dtype)
-                    }
+                    obj = {"column": column, "data_type": str(df[column].dtype)}
 
                 if obj is not None:
                     user_upload_column_data.append(obj)
 
             except Exception as e:
                 logger.error(f"Error processing column {column}: {str(e)}")
-                obj = {
-                    "column": column,
-                    "data_type": "unknown",
-                    "error": str(e)
-                }
+                obj = {"column": column, "data_type": "unknown", "error": str(e)}
                 user_upload_column_data.append(obj)
 
         return user_upload_column_data
@@ -281,6 +284,7 @@ def analyze_csv_columns(file_path, column_list=None, is_propensity_data=False, r
     except Exception as e:
         logger.error(f"An error occurred in analyze_csv_columns: {e}")
         return []
+
 
 def process_data_in_batches(c_data):
     """
@@ -294,10 +298,8 @@ def process_data_in_batches(c_data):
     """
     logger.info("Processing data in batches")
 
-    numeric_data = [
-        item for item in c_data if item["data_type"] in ["int", "float"]]
-    string_data = [
-        item for item in c_data if item["data_type"] in ["str", "bool"]]
+    numeric_data = [item for item in c_data if item["data_type"] in ["int", "float"]]
+    string_data = [item for item in c_data if item["data_type"] in ["str", "bool"]]
     chunk_size = 5
     current_numeric_columns = numeric_data[:chunk_size]
     current_string_columns = string_data[:chunk_size]
@@ -320,23 +322,25 @@ def process_data_in_batches(c_data):
         "user_upload_filter_columns_feedback_numeric": None,
     }
 
+
 class Filter_data(BaseModel):
     filters: List[Dict] = Field(
         description="List of filters for each column in the data set with their corresponding filter values and explanations"
     )
 
+
 def structured_data_tool(
-    openai_key: str, 
-    audiance_data_dict: Dict, 
-    problem_statement: str, 
-    additional_requirements: str, 
-    explanation: list, 
+    openai_key: str,
+    audiance_data_dict: Dict,
+    problem_statement: str,
+    additional_requirements: str,
+    explanation: list,
     other_requirements: str,
-    existing_filter_result: Dict = None
+    existing_filter_result: Dict = None,
 ) -> Dict:
     """
     Extracts filters from user-uploaded data and processes columns in batches.
-    
+
     Args:
         openai_key (str): The OpenAI API key
         audiance_data_dict (Dict): Dictionary containing audience data information
@@ -345,38 +349,41 @@ def structured_data_tool(
         explanation (list): List of column explanations
         other_requirements (str): Other requirements for filter generation
         existing_filter_result (Dict, optional): Previous filter results. Defaults to None.
-    
+
     Returns:
         Dict: Updated filter results and processing state
     """
+    import json
+
     from langchain_core.output_parsers import JsonOutputParser
     from langchain_core.prompts import PromptTemplate
     from langchain_openai import ChatOpenAI
-    import json
-    
+
     logger.info("STRUCTURED DATA TOOL PROCESSING")
-    
+
     # Initialize filter results if not provided
     if existing_filter_result is None:
         filter_result = {"output": [], "error": []}
     else:
         filter_result = {
             "output": existing_filter_result.get("output", []).copy(),
-            "error": existing_filter_result.get("error", []).copy()
+            "error": existing_filter_result.get("error", []).copy(),
         }
-    
+
     # Initialize LLM and parser
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, api_key=openai_key)
-    
+
     # Define pydantic class for output parsing
     class Filter_data(BaseModel):
         filter_sets: List[Dict]
-    
+
     parser = JsonOutputParser(pydantic_object=Filter_data)
-    
+
     # Set the appropriate prompt based on data type being processed
-    current_process = audiance_data_dict.get('user_upload_filter_columns_current_process', "numeric")
-    
+    current_process = audiance_data_dict.get(
+        "user_upload_filter_columns_current_process", "numeric"
+    )
+
     if current_process == "numeric":
         tool_prompt = """ You are a data-driven marketing strategist creating audience segmentation filters. Generate EXCLUSIVELY valid JSON containing an array of filter sets using ONLY these columns:
 
@@ -474,11 +481,17 @@ def structured_data_tool(
     {user_upload_filter_colums_feedback}
     </user_upload_filter_colums_feedback>
     """
-    
+
     # Prepare the prompt template
     extraction_prompt = PromptTemplate(
         template=tool_prompt,
-        input_variables=["client_problem_statement", "specific_requirements", "explanations", "column_data", "user_upload_filter_colums_feedback"],
+        input_variables=[
+            "client_problem_statement",
+            "specific_requirements",
+            "explanations",
+            "column_data",
+            "user_upload_filter_colums_feedback",
+        ],
         partial_variables={"format_instructions": parser.get_format_instructions()},
     )
 
@@ -487,34 +500,36 @@ def structured_data_tool(
 
     # Process inputs
     specific_requirements = "; " + additional_requirements + "; " + other_requirements
-    explanations_columns = [key.split(':')[0] for key in explanation]
-    
+    explanations_columns = [key.split(":")[0] for key in explanation]
+
     # Prepare data based on current process
     if current_process == "numeric":
         current_columns = audiance_data_dict.get("current_numeric_columns", [])
-        current_columns_filtered = {record['column'] for record in current_columns}
-        
-        final_explanations_columns = [key for key in explanation 
-                                      if key.split(':')[0] in current_columns_filtered]
+        current_columns_filtered = {record["column"] for record in current_columns}
+
+        final_explanations_columns = [
+            key for key in explanation if key.split(":")[0] in current_columns_filtered
+        ]
         final_columns = current_columns
-        
+
         # Get feedback if available
-        feedback = audiance_data_dict.get('user_upload_filter_columns_feedback_numeric')
+        feedback = audiance_data_dict.get("user_upload_filter_columns_feedback_numeric")
         if not feedback:
             user_upload_filter_colums_feedback = ""
         else:
             user_upload_filter_colums_feedback = f"Previous attempt feedback:\n{feedback}\n\nPlease address these issues in this extraction:"
-    
+
     else:  # string processing
         current_columns = audiance_data_dict.get("current_string_columns", [])
-        current_columns_filtered = {record['column'] for record in current_columns}
-        
-        final_explanations_columns = [key for key in explanation 
-                                      if key.split(':')[0] in current_columns_filtered]
+        current_columns_filtered = {record["column"] for record in current_columns}
+
+        final_explanations_columns = [
+            key for key in explanation if key.split(":")[0] in current_columns_filtered
+        ]
         final_columns = current_columns
-        
+
         # Get feedback if available
-        feedback = audiance_data_dict.get('user_upload_filter_columns_feedback_string')
+        feedback = audiance_data_dict.get("user_upload_filter_columns_feedback_string")
         if not feedback:
             user_upload_filter_colums_feedback = ""
         else:
@@ -522,36 +537,47 @@ def structured_data_tool(
 
     logger.info("Processing input...")
     result_dict = {}
-    
+
     try:
         logger.info(f"Processing columns: {final_columns}")
-        result = chain.invoke({
-            "client_problem_statement": problem_statement,
-            "specific_requirements": specific_requirements,
-            "column_data": final_columns,
-            "explanations": final_explanations_columns,
-            "user_upload_filter_colums_feedback": user_upload_filter_colums_feedback
-        })
-        
+        result = chain.invoke(
+            {
+                "client_problem_statement": problem_statement,
+                "specific_requirements": specific_requirements,
+                "column_data": final_columns,
+                "explanations": final_explanations_columns,
+                "user_upload_filter_colums_feedback": user_upload_filter_colums_feedback,
+            }
+        )
+
         logger.info("\nExtraction Result:")
         logger.info(json.dumps(result, indent=2))
-        
+
         # Add results to filter output
-        filter_result["output"] += result['filter_sets']
-        
+        filter_result["output"] += result["filter_sets"]
+
         # Handle column processing state updates based on current process
         if current_process == "numeric":
-            all_numeric_columns = audiance_data_dict.get('user_upload_numeric_columns', [])
-            current_numeric_columns = audiance_data_dict.get('current_numeric_columns', [])
-            chunk_size = audiance_data_dict.get('chunk_size', 5)  # Default chunk size of 5
-            
+            all_numeric_columns = audiance_data_dict.get(
+                "user_upload_numeric_columns", []
+            )
+            current_numeric_columns = audiance_data_dict.get(
+                "current_numeric_columns", []
+            )
+            chunk_size = audiance_data_dict.get(
+                "chunk_size", 5
+            )  # Default chunk size of 5
+
             # Find current position in processing
             if current_numeric_columns:
-                last_current_column = current_numeric_columns[-1]['column']
+                last_current_column = current_numeric_columns[-1]["column"]
                 current_index = next(
-                    (i for i, col in enumerate(all_numeric_columns) 
-                     if col['column'] == last_current_column), 
-                    -1
+                    (
+                        i
+                        for i, col in enumerate(all_numeric_columns)
+                        if col["column"] == last_current_column
+                    ),
+                    -1,
                 )
             else:
                 current_index = -1
@@ -559,7 +585,7 @@ def structured_data_tool(
             # Calculate next chunk of columns
             start_index = current_index + 1
             end_index = min(start_index + chunk_size, len(all_numeric_columns))
-            
+
             if start_index < len(all_numeric_columns):
                 # There are more numeric columns to process
                 new_numeric_columns = all_numeric_columns[start_index:end_index]
@@ -568,26 +594,35 @@ def structured_data_tool(
                 # No more numeric columns, switch to string processing
                 new_numeric_columns = []
                 next_process = "string"
-            
+
             # Return updated state
             result_dict = {
                 "user_upload_filter_columns_result": filter_result,
                 "current_numeric_columns": new_numeric_columns,
-                "user_upload_filter_columns_current_process": next_process
+                "user_upload_filter_columns_current_process": next_process,
             }
-            
+
         else:  # string processing
-            all_string_columns = audiance_data_dict.get('user_upload_string_columns', [])
-            current_string_columns = audiance_data_dict.get('current_string_columns', [])
-            chunk_size = audiance_data_dict.get('chunk_size', 5)  # Default chunk size of 5
-            
+            all_string_columns = audiance_data_dict.get(
+                "user_upload_string_columns", []
+            )
+            current_string_columns = audiance_data_dict.get(
+                "current_string_columns", []
+            )
+            chunk_size = audiance_data_dict.get(
+                "chunk_size", 5
+            )  # Default chunk size of 5
+
             # Find current position in processing
             if current_string_columns:
-                last_current_column = current_string_columns[-1]['column']
+                last_current_column = current_string_columns[-1]["column"]
                 current_index = next(
-                    (i for i, col in enumerate(all_string_columns) 
-                     if col['column'] == last_current_column), 
-                    -1
+                    (
+                        i
+                        for i, col in enumerate(all_string_columns)
+                        if col["column"] == last_current_column
+                    ),
+                    -1,
                 )
             else:
                 current_index = -1
@@ -595,7 +630,7 @@ def structured_data_tool(
             # Calculate next chunk of columns
             start_index = current_index + 1
             end_index = min(start_index + chunk_size, len(all_string_columns))
-            
+
             if start_index < len(all_string_columns):
                 # There are more string columns to process
                 new_string_columns = all_string_columns[start_index:end_index]
@@ -604,84 +639,83 @@ def structured_data_tool(
                 # No more string columns, processing is complete
                 new_string_columns = []
                 next_process = "completed"
-            
+
             # Return updated state
             result_dict = {
                 "user_upload_filter_columns_result": filter_result,
                 "current_string_columns": new_string_columns,
-                "user_upload_filter_columns_current_process": next_process
+                "user_upload_filter_columns_current_process": next_process,
             }
-            
+
     except Exception as e:
         logger.error(f"\nExtraction Failed: {str(e)}")
         error_obj = {
             "is_fixed": False,
             "error_message": str(e),
-            "column_list": final_columns
+            "column_list": final_columns,
         }
         filter_result["error"].append(error_obj)
-        
-        result_dict = {
-            "user_upload_filter_columns_result": filter_result
-        }
-    
+
+        result_dict = {"user_upload_filter_columns_result": filter_result}
+
     return result_dict
 
+
 def filter_csv_with_segments(
-    filter_data: Dict, 
-    csv_file_path: str, 
-    output_path: str = None, 
+    filter_data: Dict,
+    csv_file_path: str,
+    output_path: str = None,
     return_dataframe: bool = False,
-    segment_limit: int = None
+    segment_limit: int = None,
 ) -> Dict:
     """
     Filters a CSV file based on segments defined by structured_data_tool output.
-    
+
     Args:
         filter_data (Dict): Output from structured_data_tool containing filter sets
         csv_file_path (str): Path to the CSV file to filter
         output_path (str, optional): Path to save filtered CSV data. If None, data is not saved.
         return_dataframe (bool, optional): Whether to return the dataframe in results. Defaults to False.
         segment_limit (int, optional): Limit processing to the first N segments. If None, all segments are processed.
-        
+
     Returns:
         Dict: Results containing segment statistics and optionally the filtered DataFrames
     """
     logger.info("Filtering CSV data based on structured segments...")
-    
+
     # Extract filter sets from the tool output
     filter_sets = []
     if "user_upload_filter_columns_result" in filter_data:
         filter_sets = filter_data["user_upload_filter_columns_result"].get("output", [])
     else:
         filter_sets = filter_data.get("output", [])
-        
+
     # Handle direct nested structure if needed
     if not filter_sets and isinstance(filter_data.get("filter_sets", None), list):
         filter_sets = filter_data.get("filter_sets", [])
-    
+
     # If segment limit is provided, limit the number of segments to process
     if segment_limit is not None and len(filter_sets) > segment_limit:
         filter_sets = filter_sets[:segment_limit]
-    
+
     # Load the CSV file
     try:
         df = pd.read_csv(StringIO(csv_file_path))
-        
+
         logger.info(f"Loaded CSV with {len(df)} rows and {len(df.columns)} columns")
-        
+
         # Convert all column names to lowercase for case-insensitive matching
         df.columns = map(str.lower, df.columns)
-        
+
         # Create a dictionary to store results
         results = {
             "original_row_count": len(df),
             "segments": [],
             "total_filtered_row_count": 0,
             "processing_timestamp": datetime.now().isoformat(),
-            "segment_count": len(filter_sets)
+            "segment_count": len(filter_sets),
         }
-        
+
         # Process each filter set
         for i, filter_set in enumerate(filter_sets):
             segment_name = f"Segment {i+1}"
@@ -699,119 +733,143 @@ def filter_csv_with_segments(
                 # Skip invalid filter sets
                 logger.warning(f"Skipping invalid filter set format: {filter_set}")
                 continue
-            
+
             logger.info(f"Processing {segment_name}: {explanation}")
-            
+
             # Create a mask starting with all True
             segment_mask = pd.Series(True, index=df.index)
-            
+
             # Track missing columns for this segment
             missing_columns = []
             error_messages = []
-            
+
             # Apply each column filter
             if isinstance(column_names, list):
                 for col_idx, column_name in enumerate(column_names):
-                    column_name = column_name.lower() if isinstance(column_name, str) else str(column_name).lower()
-                    
+                    column_name = (
+                        column_name.lower()
+                        if isinstance(column_name, str)
+                        else str(column_name).lower()
+                    )
+
                     # Check if the column exists
                     if column_name not in df.columns:
                         missing_columns.append(column_name)
                         continue
-                    
+
                     # Get filter values for this column
                     if col_idx >= len(filter_values):
-                        error_messages.append(f"Missing filter values for column '{column_name}'")
+                        error_messages.append(
+                            f"Missing filter values for column '{column_name}'"
+                        )
                         continue
-                        
+
                     filter_conditions = filter_values[col_idx]
-                    
+
                     # Handle nested filter values structure (for contains operators with nested arrays)
-                    if len(filter_conditions) == 1 and isinstance(filter_conditions[0], list) and len(filter_conditions[0]) > 0 and isinstance(filter_conditions[0][0], list):
+                    if (
+                        len(filter_conditions) == 1
+                        and isinstance(filter_conditions[0], list)
+                        and len(filter_conditions[0]) > 0
+                        and isinstance(filter_conditions[0][0], list)
+                    ):
                         filter_conditions = filter_conditions[0]
-                    
+
                     # Apply each condition for this column
                     for condition in filter_conditions:
                         threshold = condition[0]
                         operator = condition[1]
-                        
+
                         try:
                             # Apply the appropriate filter based on the operator
                             if operator == "equal":
-                                segment_mask &= (df[column_name] == threshold)
+                                segment_mask &= df[column_name] == threshold
                             elif operator == "not_equal":
-                                segment_mask &= (df[column_name] != threshold)
+                                segment_mask &= df[column_name] != threshold
                             elif operator == "greater":
-                                segment_mask &= (df[column_name] > threshold)
+                                segment_mask &= df[column_name] > threshold
                             elif operator == "less":
-                                segment_mask &= (df[column_name] < threshold)
-                            elif operator == "contains" and df[column_name].dtype == 'object':
-                                segment_mask &= df[column_name].str.contains(str(threshold), case=False, na=False)
+                                segment_mask &= df[column_name] < threshold
+                            elif (
+                                operator == "contains"
+                                and df[column_name].dtype == "object"
+                            ):
+                                segment_mask &= df[column_name].str.contains(
+                                    str(threshold), case=False, na=False
+                                )
                             else:
-                                error_messages.append(f"Unsupported operator '{operator}' for column '{column_name}'")
+                                error_messages.append(
+                                    f"Unsupported operator '{operator}' for column '{column_name}'"
+                                )
                         except Exception as e:
-                            error_messages.append(f"Error filtering column '{column_name}': {str(e)}")
-            
+                            error_messages.append(
+                                f"Error filtering column '{column_name}': {str(e)}"
+                            )
+
             # Filter the dataframe for this segment
             segment_df = df[segment_mask]
             segment_size = len(segment_df)
-            
+
             # Add segment info to results
             segment_info = {
                 "segment_name": segment_name,
                 "explanation": explanation,
                 "row_count": segment_size,
-                "percentage_of_total": round((segment_size / len(df)) * 100, 2) if len(df) > 0 else 0,
+                "percentage_of_total": (
+                    round((segment_size / len(df)) * 100, 2) if len(df) > 0 else 0
+                ),
                 "filter_conditions": {
                     "column_names": column_names,
-                    "filter_values": filter_values
+                    "filter_values": filter_values,
                 },
                 "missing_columns": missing_columns,
-                "errors": error_messages
+                "errors": error_messages,
             }
-            
+
             # Add the filtered dataframe if requested
             if return_dataframe:
                 segment_info["dataframe"] = segment_df
-            
+
             # Save segment to CSV if output path is provided
             if output_path:
                 segment_filename = os.path.join(
                     os.path.dirname(output_path),
-                    f"{os.path.splitext(os.path.basename(output_path))[0]}_segment_{i+1}.csv"
+                    f"{os.path.splitext(os.path.basename(output_path))[0]}_segment_{i+1}.csv",
                 )
                 segment_df.to_csv(segment_filename, index=False)
                 segment_info["output_file"] = segment_filename
-            
+
             # Add segment info to results
             results["segments"].append(segment_info)
             results["total_filtered_row_count"] += segment_size
-        
+
         # Return the results
         return results
-        
+
     except Exception as e:
         import traceback
+
         logger.error(f"Error filtering CSV data: {str(e)}")
         logger.error(traceback.format_exc())  # Log the full stack trace for debugging
         return {
             "error": str(e),
             "status": "failed",
-            "message": "Failed to filter CSV data"
+            "message": "Failed to filter CSV data",
         }
 
+
 def create_email_template_from_csv(
-    csv_data: str, 
+    csv_data: str,
     campaign_context: List[str] = None,
     product_info: Dict = None,
     brand_voice: str = "professional",
     sample_rows: int = 5,
-    openai_key: str = None
+    openai_key: str = None,
 ) -> Dict:
     """
     Creates an email template based on the structure of a CSV file, not for specific users.
     Analyzes column names and a sample of data to create a template with placeholders.
-    
+
     Args:
         csv_data (str): CSV data as a string or file path
         campaign_context (List[str], optional): List of campaign context points
@@ -819,32 +877,33 @@ def create_email_template_from_csv(
         brand_voice (str, optional): Tone of voice for the email
         sample_rows (int, optional): Number of rows to sample for analysis
         openai_key (str, optional): OpenAI API key for content generation
-        
+
     Returns:
         Dict: Email template with placeholders and instructions
     """
-    import pandas as pd
-    from io import StringIO
-    from langchain_openai import ChatOpenAI
-    from langchain_core.prompts import PromptTemplate
     import json
     import os
-    
+    from io import StringIO
+
+    import pandas as pd
+    from langchain_core.prompts import PromptTemplate
+    from langchain_openai import ChatOpenAI
+
     # Use provided API key or try to get from environment
     if not openai_key:
         openai_key = os.getenv("openai_key") or os.getenv("OPENAI_API_KEY")
         if not openai_key:
-            return {
-                "error": "No OpenAI API key provided",
-                "status": "failed"
-            }
-    
+            return {"error": "No OpenAI API key provided", "status": "failed"}
+
     logger.info("Creating email template from CSV data...")
-    
+
     # Load the CSV data
     try:
         if isinstance(csv_data, str):
-            if csv_data.strip().startswith(("id,", "name,", "address,")) or "\n" in csv_data:
+            if (
+                csv_data.strip().startswith(("id,", "name,", "address,"))
+                or "\n" in csv_data
+            ):
                 # It's CSV content as a string
                 df = pd.read_csv(StringIO(csv_data))
             else:
@@ -852,28 +911,26 @@ def create_email_template_from_csv(
                 df = pd.read_csv(csv_data)
         else:
             return {"error": "Invalid CSV data format", "status": "failed"}
-            
+
         # Sample the data
         if len(df) > sample_rows:
             sample_df = df.sample(sample_rows)
         else:
             sample_df = df
-            
+
         # Collect information about columns
         column_info = []
         for column in df.columns:
             values = sample_df[column].tolist()
             data_type = df[column].dtype.name
-            
-            column_info.append({
-                "name": column,
-                "data_type": data_type,
-                "sample_values": values
-            })
-        
+
+            column_info.append(
+                {"name": column, "data_type": data_type, "sample_values": values}
+            )
+
         # Set up LLM for content generation
         llm = ChatOpenAI(model="gpt-4o", temperature=0.7, api_key=openai_key)
-        
+
         # Create a prompt template for template generation
         template_prompt = """
         Create a personalized email template based on the structure of a CSV file.
@@ -912,8 +969,7 @@ def create_email_template_from_csv(
             }}
         }}
         """
-        
-        
+
         # Add product info section if available
         if product_info:
             product_info_section = f"""
@@ -923,23 +979,25 @@ def create_email_template_from_csv(
             """
         else:
             product_info_section = ""
-        
+
         # Set up the prompt
         template_prompt_template = PromptTemplate(
             template=template_prompt,
             input_variables=["column_info", "campaign_context", "brand_voice"],
-            partial_variables={"product_info_section": product_info_section}
+            partial_variables={"product_info_section": product_info_section},
         )
-        
+
         # Format column info for prompt
         column_info_str = json.dumps(column_info, indent=2)
-        
+
         # Format campaign context
         if not campaign_context:
             campaign_context_text = "General promotional campaign"
         else:
-            campaign_context_text = "\n".join([f"- {context}" for context in campaign_context])
-        
+            campaign_context_text = "\n".join(
+                [f"- {context}" for context in campaign_context]
+            )
+
         # Generate template content
         try:
             # Generate the template
@@ -947,10 +1005,10 @@ def create_email_template_from_csv(
                 template_prompt_template.format(
                     column_info=column_info_str,
                     campaign_context=campaign_context_text,
-                    brand_voice=brand_voice
+                    brand_voice=brand_voice,
                 )
             )
-            
+
             # Parse the JSON response
             try:
                 # Try to extract JSON from the content if needed
@@ -959,54 +1017,60 @@ def create_email_template_from_csv(
                     content = content.split("```json")[1].split("```")[0].strip()
                 elif "```" in content:
                     content = content.split("```")[1].split("```")[0].strip()
-                    
+
                 template_data = json.loads(content)
-                
+
                 # Add metadata
                 template_data["csv_columns"] = df.columns.tolist()
                 template_data["processing_status"] = "success"
-                
+
                 return template_data
-                
+
             except json.JSONDecodeError:
                 # If JSON parsing fails, return the raw text
                 return {
                     "subject_line_template": "Special offer for you",
                     "body_content_template": response.content,
                     "processing_status": "json_parse_error",
-                    "csv_columns": df.columns.tolist()
+                    "csv_columns": df.columns.tolist(),
                 }
-                
+
         except Exception as e:
             logger.error(f"Error generating template: {str(e)}")
             return {
                 "error_message": str(e),
                 "processing_status": "error",
-                "csv_columns": df.columns.tolist()
+                "csv_columns": df.columns.tolist(),
             }
-            
+
     except Exception as e:
         logger.error(f"Error processing CSV data: {str(e)}")
-        return {
-            "error_message": str(e),
-            "processing_status": "error"
-        }
+        return {"error_message": str(e), "processing_status": "error"}
+
 
 class GenralizeEmailTemplate(BaseModel):
     Subject_Lines: List[list] = Field(description="list of generalized offers")
-    Incentive: List[list] = Field(description="offer for each persona in nested list format")
-    Call_to_Action: List[str] = Field(description="selected call to action option in the list format")
-    General_Email_Content: List[str] = Field(description="General content in the list format")
+    Incentive: List[list] = Field(
+        description="offer for each persona in nested list format"
+    )
+    Call_to_Action: List[str] = Field(
+        description="selected call to action option in the list format"
+    )
+    General_Email_Content: List[str] = Field(
+        description="General content in the list format"
+    )
 
-# Additional utility functions can be added here as needed 
+
+# Additional utility functions can be added here as needed
 def create_genralize_email_template(
     campaign_context: List[str] = None,
     problem_statement: str = None,
-    openai_key: str = None) -> Dict:
+    openai_key: str = None,
+) -> Dict:
     """
     Creates a generalized email template based on the structure of a CSV file.
     Analyzes column names and a sample of data to create a template with placeholders.
-    
+
     Args:
     """
     genral_tamplate = """
@@ -1111,10 +1175,7 @@ Email personalization uses: "### Email Personalization\n\n#### [Name]\n- [Catego
     if not openai_key:
         openai_key = os.getenv("openai_key") or os.getenv("OPENAI_API_KEY")
         if not openai_key:
-            return {
-                "error": "No OpenAI API key provided",
-                "status": "failed"
-            }
+            return {"error": "No OpenAI API key provided", "status": "failed"}
 
     llm = ChatOpenAI(model="gpt-4o", temperature=0, api_key=OPENAI_API_KEY)
 
@@ -1129,25 +1190,35 @@ Email personalization uses: "### Email Personalization\n\n#### [Name]\n- [Catego
     chain = prompt | llm | parser
 
     output = chain.invoke(
-        {"targeting_insights": campaign_context, "problem_statement": problem_statement})
-    
+        {"targeting_insights": campaign_context, "problem_statement": problem_statement}
+    )
+
     return output
+
 
 class GenralizeDirectEmailTemplate(BaseModel):
     Subject_Lines: List[list] = Field(description="list of generalized offers")
-    Incentive: List[list] = Field(description="offer for each persona in nested list format")
-    Call_to_Action: List[str] = Field(description="selected call to action option in the list format")
-    General_Email_Content: List[str] = Field(description="General content in the list format")
+    Incentive: List[list] = Field(
+        description="offer for each persona in nested list format"
+    )
+    Call_to_Action: List[str] = Field(
+        description="selected call to action option in the list format"
+    )
+    General_Email_Content: List[str] = Field(
+        description="General content in the list format"
+    )
 
-# Additional utility functions can be added here as needed 
+
+# Additional utility functions can be added here as needed
 def create_genralize_directemail_template(
     campaign_context: List[str] = None,
     problem_statement: str = None,
-    openai_key: str = None) -> Dict:
+    openai_key: str = None,
+) -> Dict:
     """
     Creates a generalized email template based on the structure of a CSV file.
     Analyzes column names and a sample of data to create a template with placeholders.
-    
+
     Args:
     """
     genral_tamplate = """
@@ -1251,10 +1322,7 @@ Email personalization uses: "### Email Personalization\n\n#### [Name]\n- [Catego
     if not openai_key:
         openai_key = os.getenv("openai_key") or os.getenv("OPENAI_API_KEY")
         if not openai_key:
-            return {
-                "error": "No OpenAI API key provided",
-                "status": "failed"
-            }
+            return {"error": "No OpenAI API key provided", "status": "failed"}
 
     llm = ChatOpenAI(model="gpt-4o", temperature=0, api_key=OPENAI_API_KEY)
 
@@ -1269,26 +1337,32 @@ Email personalization uses: "### Email Personalization\n\n#### [Name]\n- [Catego
     chain = prompt | llm | parser
 
     output = chain.invoke(
-        {"targeting_insights": campaign_context, "problem_statement": problem_statement})
-    
+        {"targeting_insights": campaign_context, "problem_statement": problem_statement}
+    )
+
     return output
+
 
 class GenralizeDigitalAdTemplate(BaseModel):
     Offer: List[list] = Field(description="list of generalized offers")
     Headlines: List[list] = Field(description="list of Headlines")
     Descriptions: List[list] = Field(description="list of Descriptions")
-    Call_to_Action: List[str] = Field(description="selected call to action option in the list format")
+    Call_to_Action: List[str] = Field(
+        description="selected call to action option in the list format"
+    )
     Ad_Text_Content: List[str] = Field(description="Ad_Text_Content in the list format")
 
-# Additional utility functions can be added here as needed 
+
+# Additional utility functions can be added here as needed
 def create_genralize_digitalad_template(
     campaign_context: List[str] = None,
     problem_statement: str = None,
-    openai_key: str = None) -> Dict:
+    openai_key: str = None,
+) -> Dict:
     """
     Creates a generalized email template based on the structure of a CSV file.
     Analyzes column names and a sample of data to create a template with placeholders.
-    
+
     Args:
     """
     genral_tamplate = """
@@ -1396,10 +1470,7 @@ Email personalization uses: "### Email Personalization\n\n#### [Name]\n- [Catego
     if not openai_key:
         openai_key = os.getenv("openai_key") or os.getenv("OPENAI_API_KEY")
         if not openai_key:
-            return {
-                "error": "No OpenAI API key provided",
-                "status": "failed"
-            }
+            return {"error": "No OpenAI API key provided", "status": "failed"}
 
     llm = ChatOpenAI(model="gpt-4o", temperature=0, api_key=OPENAI_API_KEY)
 
@@ -1414,6 +1485,7 @@ Email personalization uses: "### Email Personalization\n\n#### [Name]\n- [Catego
     chain = prompt | llm | parser
 
     output = chain.invoke(
-        {"targeting_insights": campaign_context, "problem_statement": problem_statement})
-    
+        {"targeting_insights": campaign_context, "problem_statement": problem_statement}
+    )
+
     return output

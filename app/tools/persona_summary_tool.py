@@ -1,22 +1,31 @@
-from typing import Dict, Any, List, Optional
+import asyncio
+import json
 import logging
 import os
-import traceback
 import time
-import json
-import asyncio
-import requests
-import pandas as pd
-from app.tools.base_tool import BaseTool
-from app.models.model import ToolResponse
-from app.utils.db import MongoDB
-from langchain_openai import ChatOpenAI
-from langchain_core.output_parsers import JsonOutputParser
-from langchain_core.pydantic_v1 import BaseModel, Field
-from langchain_core.prompts import PromptTemplate
-from dotenv import load_dotenv
-from app.utils.audience_utils import find_audience_by_id, analyze_csv_columns, process_data_in_batches, structured_data_tool, filter_csv_with_segments, create_email_template_from_csv, create_genralize_email_template
+import traceback
+from typing import Any, Dict, List, Optional
 
+import pandas as pd
+import requests
+from dotenv import load_dotenv
+from langchain_core.output_parsers import JsonOutputParser
+from langchain_core.prompts import PromptTemplate
+from langchain_core.pydantic_v1 import BaseModel, Field
+from langchain_openai import ChatOpenAI
+
+from app.models.model import ToolResponse
+from app.tools.base_tool import BaseTool
+from app.utils.audience_utils import (
+    analyze_csv_columns,
+    create_email_template_from_csv,
+    create_genralize_email_template,
+    filter_csv_with_segments,
+    find_audience_by_id,
+    process_data_in_batches,
+    structured_data_tool,
+)
+from app.utils.db import MongoDB
 
 # Load environment variables from .env file
 load_dotenv()
@@ -99,17 +108,22 @@ Give output in below JSON format:
 Remember to tailor the narrative to the problem statement if one is provided. If no problem statement is given, focus on creating a well-rounded description of the persona based on the JSON data.
 """
 
+
 class ColumnSelection(BaseModel):
     column_name: List[str] = Field(description="list of relevant columns")
-    explanation: List[str] = Field(description="explanation for each column selection in one line and in list format")
+    explanation: List[str] = Field(
+        description="explanation for each column selection in one line and in list format"
+    )
+
 
 class PersonaSummary(BaseModel):
     persona_summary: str = Field("persona summary in the string format")
 
+
 class PersonaSummaryTool(BaseTool):
     """
     Tool for creating persona narratives based on user data
-    
+
     This tool implements the functionality from PersonaSummarizeView in the original
     views.py file. It processes the model data and creates detailed persona narratives
     that can later be used for content personalization.
@@ -117,14 +131,10 @@ class PersonaSummaryTool(BaseTool):
 
     def get_json(self, modelID, session_token, userID) -> str:
         url = "https://staging-api.boostt.ai/api/cdm/model/get"
-        payload = json.dumps({
-            "modelID": modelID,
-            "session_token": session_token,
-            "userID": userID
-        })
-        headers = {
-            'Content-Type': 'application/json'
-        }
+        payload = json.dumps(
+            {"modelID": modelID, "session_token": session_token, "userID": userID}
+        )
+        headers = {"Content-Type": "application/json"}
 
         response = requests.request("POST", url, headers=headers, data=payload)
         return response.json()
@@ -148,7 +158,8 @@ class PersonaSummaryTool(BaseTool):
         chain = prompt | llm | parser
 
         output = chain.invoke(
-            {"problem_statement": problem_statement, "column_list": column_list})
+            {"problem_statement": problem_statement, "column_list": column_list}
+        )
 
         return output
 
@@ -158,34 +169,39 @@ class PersonaSummaryTool(BaseTool):
         prompt = PromptTemplate(
             template=prompt_summarize_persona,
             input_variables=["problem_statement", "persona_name", "persona_json"],
-            partial_variables={"format_instructions": parser.get_format_instructions()}
+            partial_variables={"format_instructions": parser.get_format_instructions()},
         )
         chain = prompt | llm | parser
         output = chain.invoke(
-            {"problem_statement": problem_statement, "persona_name": persona_name, "persona_json": columns_data_str})
+            {
+                "problem_statement": problem_statement,
+                "persona_name": persona_name,
+                "persona_json": columns_data_str,
+            }
+        )
 
         return output
 
     def get_name(self) -> str:
         return "persona_summary"
-    
+
     def get_description(self) -> str:
         return "Creates detailed persona narratives based on user data"
-    
+
     def get_required_params(self) -> List[str]:
         return ["user_id", "model_id"]
-    
+
     def get_optional_params(self) -> List[str]:
         return ["session_token", "conversation_id", "action"]
-    
+
     def get_model_name_by_id(self, data, model_id):
         """
         Get the model name from the model ID
-        
+
         Args:
             data: The list of models
             model_id: The model ID to find
-            
+
         Returns:
             The model name if found, otherwise None
         """
@@ -197,14 +213,14 @@ class PersonaSummaryTool(BaseTool):
     def fetch_model_list(self, session_token, user_id, limit=12, page=1, status=""):
         """
         Fetch the list of models from the API
-        
+
         Args:
             session_token: The session token for authentication
             user_id: The user ID
             limit: The number of models to return per page
             page: The page number
             status: The model status filter
-            
+
         Returns:
             The API response as a dictionary or list
         """
@@ -214,7 +230,7 @@ class PersonaSummaryTool(BaseTool):
             "page": page,
             "session_token": session_token,
             "status": status,
-            "userID": user_id
+            "userID": user_id,
         }
         try:
             response = requests.post(url, json=payload)
@@ -223,70 +239,80 @@ class PersonaSummaryTool(BaseTool):
         except requests.exceptions.RequestException as e:
             logger.error(f"API request failed: {e}")
             return []
-        
+
     async def execute(self, parameters: Dict[str, Any]) -> ToolResponse:
         """
         Execute the tool with the given parameters
-        
+
         Args:
             parameters: The parameters for the tool
-            
+
         Returns:
             The response from the tool
         """
         # try:
         if True:
             # Extract parameters
-            user_id = parameters.get("user_id") # required
-            model_id = parameters.get("model_id") # required
-            audience_id = parameters.get("audience_id") # optional
-            session_token = parameters.get("session_token") # optional
-            conversation_id = parameters.get("conversation_id") # optional
-            conversation_stage = parameters.get("conversation_stage", "creating_persona")
-            recreate_personas = parameters.get("recreate_personas", False)  # Flag to indicate if we should recreate existing personas
-            personalization_data_type = parameters.get("personalization_data_type", "").lower()
-            action = parameters.get("action", "")  # Action parameter to determine operation
+            user_id = parameters.get("user_id")  # required
+            model_id = parameters.get("model_id")  # required
+            audience_id = parameters.get("audience_id")  # optional
+            session_token = parameters.get("session_token")  # optional
+            conversation_id = parameters.get("conversation_id")  # optional
+            conversation_stage = parameters.get(
+                "conversation_stage", "creating_persona"
+            )
+            recreate_personas = parameters.get(
+                "recreate_personas", False
+            )  # Flag to indicate if we should recreate existing personas
+            personalization_data_type = parameters.get(
+                "personalization_data_type", ""
+            ).lower()
+            action = parameters.get(
+                "action", ""
+            )  # Action parameter to determine operation
 
             # Handle request to get generalized personalization data
             if action == "get_generalized_personalization":
-                logger.info(f"Retrieving generalized personalization data for user_id={user_id}")
-                
+                logger.info(
+                    f"Retrieving generalized personalization data for user_id={user_id}"
+                )
+
                 # Get generalized personalization data from the database
                 generalized_data = await self.get_generalized_personalizations(
                     user_id=user_id,
                     audience_id=audience_id,
-                    conversation_id=conversation_id
+                    conversation_id=conversation_id,
                 )
-                
+
                 if not generalized_data:
                     return ToolResponse(
                         status="not_found",
                         message="No generalized personalization data found. Please create personalization data first.",
-                        data={}
+                        data={},
                     )
-                
+
                 # Format the response message
                 formatted_message = "### Generalized Personalization Criteria\n\n"
                 for idx, item in enumerate(generalized_data, 1):
                     criteria_list = item.get("filter_criteria", [])
                     audience = item.get("audience_id", "Unknown")
                     formatted_message += f"#### Audience ID: {audience}\n"
-                    
+
                     if criteria_list:
                         formatted_message += "Criteria:\n"
                         for i, criteria in enumerate(criteria_list, 1):
                             formatted_message += f"{i}. {criteria}\n"
                     else:
                         formatted_message += "No criteria found.\n"
-                    
-                    formatted_message += f"Created: {item.get('created_at', 'Unknown')}\n\n"
-                
+
+                    formatted_message += (
+                        f"Created: {item.get('created_at', 'Unknown')}\n\n"
+                    )
+
                 return ToolResponse(
                     status="success",
                     message=formatted_message,
-                    data={
-                        "generalized_personalization": generalized_data
-                    }
+                    data={"generalized_personalization": generalized_data},
                 )
 
             if not personalization_data_type:
@@ -294,11 +320,18 @@ class PersonaSummaryTool(BaseTool):
                     status="input_required",
                     message="Do you want to create a persona narrative for audience data or persona data?",
                     required_inputs=[],
-                    data={}
+                    data={},
                 )
-            
-            print("conversation_id conversation_id", conversation_id, personalization_data_type, recreate_personas, model_id, user_id)
-            check  = None
+
+            print(
+                "conversation_id conversation_id",
+                conversation_id,
+                personalization_data_type,
+                recreate_personas,
+                model_id,
+                user_id,
+            )
+            check = None
             if personalization_data_type == "persona data":
                 check = model_id
             elif personalization_data_type == "audience data":
@@ -313,46 +346,52 @@ class PersonaSummaryTool(BaseTool):
                     missing.append("model_id")
                 if not audience_id and personalization_data_type == "audience data":
                     missing.append("audience_id")
-                
+
                 # Provide a more conversational response based on what's missing
                 message = ""
                 if "model_id" in missing:
                     message = "To get started, could you please share which model you'd like to use? "
                 elif "user_id" in missing:
-                    message = "Could you please provide your user ID so I can save your work?"
+                    message = (
+                        "Could you please provide your user ID so I can save your work?"
+                    )
                 elif "audience_id" in missing:
                     message = "To get started, could you please share which Audiance you'd like to use?"
                 else:
-                    message = "To create a persona narrative, I need a bit more information. " + ", ".join(missing) + " would be helpful."
-                
+                    message = (
+                        "To create a persona narrative, I need a bit more information. "
+                        + ", ".join(missing)
+                        + " would be helpful."
+                    )
+
                 return ToolResponse(
                     status="input_required",
                     message=message,
                     required_inputs=missing,
-                    data={} 
+                    data={},
                 )
-            
+
             # Check if personas already exist for this user and model
             # if not recreate_personas:
             #     # Import MongoDB here to avoid circular imports
             #     from app.utils.db import MongoDB
             #     db = MongoDB()
-                
+
             #     try:
             #         persona_summaries = await db.get_persona_summaries(
-            #             user_id=str(user_id), 
-            #             model_id=str(model_id), 
-            #             conversation_id=str(conversation_id), 
+            #             user_id=str(user_id),
+            #             model_id=str(model_id),
+            #             conversation_id=str(conversation_id),
             #             conversation_status=True
             #         )
-                    
+
             #         if persona_summaries and len(persona_summaries) > 0:
             #             # Personas already exist
             #             return ToolResponse(
             #                 status="exsist",
             #                 message="I found existing persona narratives for this model ID.",
             #                 data={
-                                
+
             #                 }
             #             )
             #     except Exception as e:
@@ -360,137 +399,143 @@ class PersonaSummaryTool(BaseTool):
             #         # Continue with creation if there's an error checking existing personas
             # else:
             #     pass
-                # User wants to recreate personas - delete existing ones first
-                # try:
-                #     # Import MongoDB here to avoid circular imports
-                #     from app.utils.db import MongoDB
-                #     db = MongoDB()
-                    
-                #     # Delete existing personas for this user and model
-                #     await db.delete_persona_summaries(user_id=str(user_id), model_id=str(model_id))
-                #     logger.info(f"Deleted existing personas for user_id={user_id}, model_id={model_id}")
-                # except Exception as e:
-                #     logger.error(f"Error deleting existing personas: {str(e)}")
-                    # Continue with creation even if deletion fails
+            # User wants to recreate personas - delete existing ones first
+            # try:
+            #     # Import MongoDB here to avoid circular imports
+            #     from app.utils.db import MongoDB
+            #     db = MongoDB()
+
+            #     # Delete existing personas for this user and model
+            #     await db.delete_persona_summaries(user_id=str(user_id), model_id=str(model_id))
+            #     logger.info(f"Deleted existing personas for user_id={user_id}, model_id={model_id}")
+            # except Exception as e:
+            #     logger.error(f"Error deleting existing personas: {str(e)}")
+            # Continue with creation even if deletion fails
             print("personalization_data_type", personalization_data_type)
             if personalization_data_type == "persona data":
                 db = MongoDB()
 
                 persona_summaries = await db.get_persona_summaries(
-                        user_id=str(user_id), 
-                        model_id=str(model_id), 
-                        conversation_id=str(conversation_id), 
-                        conversation_status=True
-                    )
-                    
+                    user_id=str(user_id),
+                    model_id=str(model_id),
+                    conversation_id=str(conversation_id),
+                    conversation_status=True,
+                )
+
                 if persona_summaries and len(persona_summaries) > 0:
                     # Personas already exist
-                    persona_dict = {entry["persona_name"]: entry["data"] for entry in persona_summaries}
+                    persona_dict = {
+                        entry["persona_name"]: entry["data"]
+                        for entry in persona_summaries
+                    }
                     message = f"I found existing persona narratives for this model: {model_id}"
                     message = self.replace_model_ids_with_names(
-                        message, 
-                        session_token, 
-                        model_id,
-                        user_id
+                        message, session_token, model_id, user_id
                     )
                     return ToolResponse(
                         status="exsist",
                         message=message,
-                        data={
-                            "persona_summaries": persona_dict
-                        }
+                        data={"persona_summaries": persona_dict},
                     )
-                
-                logger.info(f"Creating persona narratives for user_id={user_id}, model_id={model_id}")
-                
+
+                logger.info(
+                    f"Creating persona narratives for user_id={user_id}, model_id={model_id}"
+                )
+
                 # Initialize MongoDB
                 db = MongoDB()
-                
+
                 # Process the model data to generate persona summaries
-                output_persona_json = await self._filter_json(model_id, session_token, user_id)
-                
+                output_persona_json = await self._filter_json(
+                    model_id, session_token, user_id
+                )
+
                 # Check if we received valid persona data
                 if not output_persona_json:
                     return ToolResponse(
                         status="error",
                         message="Could not generate persona narratives. The model may not contain sufficient data.",
-                        data=None
+                        data=None,
                     )
-                    
+
                 logger.info(f"Generated {len(output_persona_json)} persona narratives")
-                
+
                 # Format data for storage and response
                 person_summary_data = []
                 created_at = time.time()
-                
-                # Save to database  
+
+                # Save to database
                 await db.save_persona_summary(
                     user_id=user_id,
                     model_id=model_id,
                     output_persona_json=output_persona_json,
                     session_token=session_token,
                     is_summary=True,
-                    conversation_id=conversation_id
+                    conversation_id=conversation_id,
                 )
 
                 # Store each persona in a separate database record
                 for persona_name, summary in output_persona_json.items():
                     # Format for response
-                    person_summary_data.append({
-                        "role": "assistant",
-                        "content": f"### {persona_name}\n{summary}"
-                    })
-                
+                    person_summary_data.append(
+                        {
+                            "role": "assistant",
+                            "content": f"### {persona_name}\n{summary}",
+                        }
+                    )
+
                 # Save tool execution record
                 await db.save_tool_execution(
                     tool_name=self.get_name(),
                     parameters=parameters,
                     result={"personas": output_persona_json},
-                    user_id=user_id
+                    user_id=user_id,
                 )
-                
+
                 # Format the response for the client
                 formatted_message = "### Persona Narratives\n\n"
                 for persona_name, summary in output_persona_json.items():
                     formatted_message += f"#### {persona_name}\n"
                     formatted_message += f"{summary}\n\n"
-                
 
                 simplified_message = f"I've successfully created the persona narrative"
                 if persona_name:
                     simplified_message += f" for '{persona_name}'"
-                
+
                 # Replace model ID with name if session token is available
                 display_model = model_id
-                
+
                 simplified_message += f" using model {display_model}."
                 simplified_message += " Would you like to create personalized content using this persona now?"
-                
+
                 formatted_message = self.replace_model_ids_with_names(
-                        simplified_message, 
-                        session_token, 
-                        model_id,
-                        user_id
-                    )
+                    simplified_message, session_token, model_id, user_id
+                )
                 return ToolResponse(
                     status="success",
                     message=formatted_message,
                     data={
                         "personas": output_persona_json,
-                        "conversation_data": person_summary_data
-                    }
+                        "conversation_data": person_summary_data,
+                    },
                 )
             if personalization_data_type == "audience data":
                 # Use audience-based personalization logic from csv_email_template_tool
-                logger.info(f"Creating email personalization using audience data with ID: {audience_id}")
-                
+                logger.info(
+                    f"Creating email personalization using audience data with ID: {audience_id}"
+                )
+
                 # Step 1: Find audience data using find_audience_by_id
                 logger.info(f"Finding audience data for target ID: {audience_id}")
                 USER_ID_PERSONA = user_id
                 SESSION_TOKEN_PERSONA = session_token
                 TARGET_ID = audience_id
-                
-                audience_data = find_audience_by_id(user_id=USER_ID_PERSONA, SESSION_TOKEN=SESSION_TOKEN_PERSONA, target_id=TARGET_ID)
+
+                audience_data = find_audience_by_id(
+                    user_id=USER_ID_PERSONA,
+                    SESSION_TOKEN=SESSION_TOKEN_PERSONA,
+                    target_id=TARGET_ID,
+                )
                 if audience_data:
                     logger.info(f"Found audience data: {audience_data.get('_id')}")
                     if audience_data.get("fileURL") == "dummy_url":
@@ -507,26 +552,32 @@ class PersonaSummaryTool(BaseTool):
                     return ToolResponse(
                         status="error",
                         message=f"Could not find audience data for ID: {audience_id}. Please verify that this is a valid audience ID.",
-                        data=None
+                        data=None,
                     )
-                
+
                 # Step 2: Analyze CSV columns
                 logger.info("Analyzing CSV columns")
-                column_data = analyze_csv_columns(file_path, [], is_propensity_data=False, rows="All", seed=42)
-                logger.info(f"Column analysis complete. Found {len(column_data)} columns.")
-                
+                column_data = analyze_csv_columns(
+                    file_path, [], is_propensity_data=False, rows="All", seed=42
+                )
+                logger.info(
+                    f"Column analysis complete. Found {len(column_data)} columns."
+                )
+
                 # Step 3: Process data in batches
                 logger.info("Processing data in batches")
                 data_batches = process_data_in_batches(column_data)
                 logger.info("Batch processing complete")
-                
+
                 # Create explanations for columns based on the actual columns in the data
                 column_explanations = []
                 for col in column_data:
                     col_name = col.get("column", "")
                     data_type = col.get("data_type", "unknown")
-                    column_explanations.append(f"{col_name}: {col_name.replace('_', ' ').title()} ({data_type})")
-                
+                    column_explanations.append(
+                        f"{col_name}: {col_name.replace('_', ' ').title()} ({data_type})"
+                    )
+
                 # Step 4: Generate filter data using structured_data_tool
                 logger.info("Generating filter data")
                 filter_data = structured_data_tool(
@@ -535,39 +586,42 @@ class PersonaSummaryTool(BaseTool):
                     problem_statement="genrate insights from the data for the marketing campaign",
                     additional_requirements="Focus on creating segments that will be useful for a targeted email campaign",
                     explanation=column_explanations,
-                    other_requirements="Ensure segments are meaningful for creating an effective personalized email campaign"
+                    other_requirements="Ensure segments are meaningful for creating an effective personalized email campaign",
                 )
                 logger.info("Filter data generation complete")
-                
+
                 # Step 5: Filter CSV with segments
                 logger.info("Filtering CSV with segments")
                 filtered_results = filter_csv_with_segments(
-                    filter_data=filter_data, 
-                    csv_file_path=file_path, 
-                    return_dataframe=True
+                    filter_data=filter_data,
+                    csv_file_path=file_path,
+                    return_dataframe=True,
                 )
-                logger.info(f"Filtering complete. Found {len(filtered_results.get('segments', []))} segments.")
+                logger.info(
+                    f"Filtering complete. Found {len(filtered_results.get('segments', []))} segments."
+                )
 
-                print("filtered_results-----------------------------------", filtered_results)
-                
+                print(
+                    "filtered_results-----------------------------------",
+                    filtered_results,
+                )
+
                 # Step 6: Extract campaign context from filter data
                 all_filter_criteria = self._extract_filter_criteria(filter_data)
-                
+
                 # Create the collection and store the data
                 db = MongoDB()
                 await db.save_generalized_personalization(
                     user_id=user_id,
                     audience_id=audience_id,
                     filter_criteria=all_filter_criteria,
-                    conversation_id=conversation_id
+                    conversation_id=conversation_id,
                 )
-                
+
                 return ToolResponse(
                     status="success",
                     message="Successfully created and stored generalized personalization data.",
-                    data={
-                        "filter_criteria": all_filter_criteria
-                    }
+                    data={"filter_criteria": all_filter_criteria},
                 )
         # except Exception as e:
         #     logger.error(f"Error executing PersonaSummaryTool: {str(e)}")
@@ -577,17 +631,17 @@ class PersonaSummaryTool(BaseTool):
         #         message=f"Error creating persona narratives: {str(e)}",
         #         data=None
         #     )
-    
+
     def replace_model_ids_with_names(self, text, session_token, model_id, user_id):
         """
         Replace model IDs in text with their corresponding model names.
         Uses regex to find potential model IDs and replaces them with model names.
-        
+
         Args:
             text (str): The text containing model IDs
             session_token (str): Session token for API authentication
             user_id (str): User ID for API authentication
-            
+
         Returns:
             str: Text with model IDs replaced by model names
         """
@@ -595,10 +649,12 @@ class PersonaSummaryTool(BaseTool):
             if not text:
                 return text
 
-            response = self.fetch_model_list(session_token=session_token, user_id=user_id, model_id=model_id)
-            
+            response = self.fetch_model_list(
+                session_token=session_token, user_id=user_id, model_id=model_id
+            )
+
             try:
-                model_name = response['name'] 
+                model_name = response["name"]
             except:
                 model_name = ""
 
@@ -608,17 +664,19 @@ class PersonaSummaryTool(BaseTool):
             return text
         return text
 
-    async def _filter_json(self, model_id: str, session_token: Optional[str], user_id: str) -> Dict[str, str]:
+    async def _filter_json(
+        self, model_id: str, session_token: Optional[str], user_id: str
+    ) -> Dict[str, str]:
         """
         Process the model data and extract persona narratives
-        
+
         This is adapted from persona_summary_utils.filter_json in the original code
-        
+
         Args:
             model_id: The model ID to process
             session_token: Optional session token
             user_id: The user ID
-            
+
         Returns:
             Dictionary of persona names to summaries
         """
@@ -632,49 +690,53 @@ class PersonaSummaryTool(BaseTool):
             print("data", data)
             print(model_id, session_token, user_id, "&&&&&&&&&&&&&&&&&&&&")
 
-            for i in data['report']['personas']['personas']:
-                persona_name = i['name']
+            for i in data["report"]["personas"]["personas"]:
+                persona_name = i["name"]
                 print("persona_name", persona_name)
                 persona_id_persona = i["id"]
                 keys_bin = []
-                for j in i['details']['bins'].items():
+                for j in i["details"]["bins"].items():
                     key, value = j
                     keys_bin.append(key.split("/")[1])
 
                 rem_column_name = []
-                for i_ in data['report']['breakdown']:
-                    persona_id = i_['persona_id']
+                for i_ in data["report"]["breakdown"]:
+                    persona_id = i_["persona_id"]
                     if persona_id_persona == persona_id:
-                        for j in i_['traits']:
-                            col_name = j['trait_name']
+                        for j in i_["traits"]:
+                            col_name = j["trait_name"]
                             col_name = col_name.split("/")[1]
                             # print(keys_bin)
                             if col_name not in keys_bin:
                                 rem_column_name.append(col_name)
-                column_dict = self.column_selection(problem_statement="", column_list=rem_column_name)
-                col_filter_list = column_dict['column_name']
+                column_dict = self.column_selection(
+                    problem_statement="", column_list=rem_column_name
+                )
+                col_filter_list = column_dict["column_name"]
 
                 string_llm = """"""
-                for i_ in data['report']['breakdown']:
-                    persona_id = i_['persona_id']
+                for i_ in data["report"]["breakdown"]:
+                    persona_id = i_["persona_id"]
                     if persona_id_persona == persona_id:
-                        for j in i_['traits']:
-                            col_name = j['trait_name']
+                        for j in i_["traits"]:
+                            col_name = j["trait_name"]
                             col_name = col_name.split("/")[1]
                             if col_name in col_filter_list:
-                                df = pd.DataFrame(j['bins'])
+                                df = pd.DataFrame(j["bins"])
                                 if "max" in df.columns:
                                     # Merging rows where count is 0 sequentially
                                     merged_data = []
                                     temp_row = None
                                     for _, row in df.iterrows():
-                                        if row['count'] == 0:
+                                        if row["count"] == 0:
                                             if temp_row is None:  # Start merging
                                                 temp_row = row.copy()
                                             else:  # Update the 'max' while keeping 'min' as is
-                                                temp_row['max'] = row['max']
+                                                temp_row["max"] = row["max"]
                                         else:
-                                            if temp_row is not None:  # Add the merged row before moving to non-zero count
+                                            if (
+                                                temp_row is not None
+                                            ):  # Add the merged row before moving to non-zero count
                                                 merged_data.append(temp_row)
                                                 temp_row = None
                                             merged_data.append(row)
@@ -685,102 +747,116 @@ class PersonaSummaryTool(BaseTool):
 
                                     # Create the final DataFrame
                                     df_final = pd.DataFrame(merged_data)
-                                    max_list = df_final['max'].tolist()
-                                    min_list = df_final['min'].tolist()
-                                    count_list = df_final['count'].tolist()
-                                    percent_list = df_final['percent'].tolist()
+                                    max_list = df_final["max"].tolist()
+                                    min_list = df_final["min"].tolist()
+                                    count_list = df_final["count"].tolist()
+                                    percent_list = df_final["percent"].tolist()
                                     string_llm += f"""column_name: {col_name}, max: {max_list}, min: {min_list}, count: {count_list}, percent: {percent_list} \n"""
                                     # print("string_llm", string_llm)
 
                                 if "value" in df.columns:
                                     # Separate rows where count == 0
-                                    zero_count_df = df[df['count'] == 0]
+                                    zero_count_df = df[df["count"] == 0]
 
                                     # Combine `value` column into a list for rows where count == 0
                                     merged_row = {
-                                        'count': 0,
-                                        'value': list(zero_count_df['value']),
-                                        'percent': 0.0  # Assuming percent is also zero for such rows
+                                        "count": 0,
+                                        "value": list(zero_count_df["value"]),
+                                        "percent": 0.0,  # Assuming percent is also zero for such rows
                                     }
 
                                     # Filter out rows where count == 0
-                                    df_non_zero = df[df['count'] != 0]
+                                    df_non_zero = df[df["count"] != 0]
 
                                     # Add the merged row to the non-zero rows
-                                    df_final = pd.concat([df_non_zero, pd.DataFrame([merged_row])], ignore_index=True)
+                                    df_final = pd.concat(
+                                        [df_non_zero, pd.DataFrame([merged_row])],
+                                        ignore_index=True,
+                                    )
 
-                                    value_list = df_final['value'].tolist()
-                                    count_list = df_final['count'].tolist()
-                                    percent_list = df_final['percent'].tolist()
+                                    value_list = df_final["value"].tolist()
+                                    count_list = df_final["count"].tolist()
+                                    percent_list = df_final["percent"].tolist()
                                     string_llm += f"""column_name: {col_name}, value: {value_list}, count: {count_list}, percent: {percent_list} \n"""
-                output_persona_summary = self.persona_summary(problem_statement="", persona_name=persona_name,
-                                                 columns_data_str=string_llm)
-                persona_summary_dict[persona_name] = output_persona_summary['persona_summary']
+                output_persona_summary = self.persona_summary(
+                    problem_statement="",
+                    persona_name=persona_name,
+                    columns_data_str=string_llm,
+                )
+                persona_summary_dict[persona_name] = output_persona_summary[
+                    "persona_summary"
+                ]
             return persona_summary_dict
-            
+
         except Exception as e:
             logger.error(f"Error in filter_json: {str(e)}")
             traceback.print_exc()
             return {}
-    
+
     def _get_base_price(self) -> float:
         """
         Get the base price for the tool
-        
+
         Returns:
             The base price as a float
         """
         return 5.0
-        
+
     def _get_pricing_unit(self) -> str:
         """
         Get the pricing unit for the tool
-        
+
         Returns:
             The pricing unit (e.g., "per request", "per token", etc.)
         """
         return "per persona set"
-        
+
     def _get_additional_fees(self) -> Dict[str, Any]:
         """
         Get any additional fees for the tool
-        
+
         Returns:
             A dictionary of additional fees
         """
         return {
             "complexity_fee": {
                 "amount": 2.0,
-                "description": "Additional fee for complex persona narratives with detailed backstories"
+                "description": "Additional fee for complex persona narratives with detailed backstories",
             }
-        } 
-    
+        }
+
     def _extract_filter_criteria(self, filter_data: Dict[str, Any]) -> List[str]:
         """
         Extracts segmentation criteria from filter data
-        
+
         Args:
             filter_data: The filter data from structured_data_tool
-            
+
         Returns:
             List of criteria strings
         """
         all_criteria = []
-        
+
         # Try different potential structures of filter data
         filter_sets = []
         if "user_upload_filter_columns_result" in filter_data:
-            filter_sets = filter_data["user_upload_filter_columns_result"].get("output", [])
+            filter_sets = filter_data["user_upload_filter_columns_result"].get(
+                "output", []
+            )
         else:
             filter_sets = filter_data.get("output", [])
-            
+
         # Handle direct nested structure if needed
         if not filter_sets and isinstance(filter_data.get("filter_sets", None), list):
             filter_sets = filter_data.get("filter_sets", [])
-        
+
         # Extract criteria from filter sets
         for filter_set in filter_sets:
-            if isinstance(filter_set, dict) and "explanation" in filter_set and filter_set["explanation"]:
+            if (
+                isinstance(filter_set, dict)
+                and "explanation" in filter_set
+                and filter_set["explanation"]
+            ):
                 all_criteria.append(filter_set["explanation"])
             elif isinstance(filter_set, dict) and "column_names" in filter_set:
                 column_names = filter_set.get("column_names", [])
@@ -792,28 +868,33 @@ class PersonaSummaryTool(BaseTool):
                 if isinstance(filter_set[2], str) and filter_set[2]:
                     all_criteria.append(filter_set[2])
                 else:
-                    column_names = filter_set[0] if isinstance(filter_set[0], list) else []
+                    column_names = (
+                        filter_set[0] if isinstance(filter_set[0], list) else []
+                    )
                     if column_names:
                         criteria_desc = f"Criteria based on: {', '.join(str(col) for col in column_names)}"
                         all_criteria.append(criteria_desc)
-        
+
         return all_criteria
 
-    async def get_generalized_personalizations(self, user_id: str, audience_id: Optional[str] = None, conversation_id: Optional[str] = None) -> List[Dict[str, Any]]:
+    async def get_generalized_personalizations(
+        self,
+        user_id: str,
+        audience_id: Optional[str] = None,
+        conversation_id: Optional[str] = None,
+    ) -> List[Dict[str, Any]]:
         """
         Retrieve generalized personalization data from the database
-        
+
         Args:
             user_id: The ID of the user
             audience_id: Optional audience ID filter
             conversation_id: Optional conversation ID filter
-            
+
         Returns:
             List of generalized personalization documents
         """
         db = MongoDB()
         return await db.get_generalized_personalization(
-            user_id=user_id,
-            audience_id=audience_id,
-            conversation_id=conversation_id
+            user_id=user_id, audience_id=audience_id, conversation_id=conversation_id
         )

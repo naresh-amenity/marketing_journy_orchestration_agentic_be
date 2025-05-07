@@ -1,20 +1,22 @@
+import json
 import logging
 import os
-import json
 import re
-from typing import Dict, Any, List, Optional, Union
 import uuid
+from typing import Any, Dict, List, Optional, Union
+
 from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
 
-from langchain_openai import ChatOpenAI
-from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 from langchain_core.prompts import ChatPromptTemplate
-from app.utils.tool_registry import ToolRegistry
-from app.utils.graph_processor import GraphProcessor
+from langchain_openai import ChatOpenAI
+
 from app.models.model import UserRequest
+from app.utils.graph_processor import GraphProcessor
+from app.utils.tool_registry import ToolRegistry
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -51,37 +53,36 @@ When creating a marketing asset, the general workflow is:
 Remember that your goal is to help the user complete their marketing tasks in a natural conversational way.
 """
 
+
 class ChatProcessor:
     """
     Class for processing chat interactions
     """
-    
+
     def __init__(self, mongodb):
         """
         Initialize the chat processor
-        
+
         Args:
             mongodb: MongoDB instance for storing conversations
         """
         self.mongodb = mongodb
         self.llm = ChatOpenAI(
-            model_name="gpt-4o-mini",
-            temperature=0.7,
-            api_key=OPENAI_API_KEY
+            model_name="gpt-4o-mini", temperature=0.7, api_key=OPENAI_API_KEY
         )
-        
+
     async def process_message(
-        self, 
-        message: str, 
-        user_id: str = None, 
-        model_id: str = None, 
+        self,
+        message: str,
+        user_id: str = None,
+        model_id: str = None,
         session_token: str = None,
         conversation_id: str = None,
-        conversation_history: List[Dict[str, Any]] = None
+        conversation_history: List[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """
         Process a chat message
-        
+
         Args:
             message: The user's message
             user_id: User identifier
@@ -89,7 +90,7 @@ class ChatProcessor:
             session_token: Session token
             conversation_id: Conversation identifier
             conversation_history: List of previous messages
-            
+
         Returns:
             Dict with response
         """
@@ -148,7 +149,7 @@ class ChatProcessor:
             messages = []
 
             # Add system message with formatting instructions
-            # messages.append(("system", """You are a helpful assistant for a marketing personalization system. 
+            # messages.append(("system", """You are a helpful assistant for a marketing personalization system.
             # You help users with creating persona narratives and personalizing marketing content.
 
             # FORMATTING GUIDELINES:
@@ -179,12 +180,12 @@ class ChatProcessor:
             # """))
 
             messages.append(("system", prompt_blyn))
-            
+
             # First check if this is a new session
             is_new_session = False
             if not conversation_history or len(conversation_history) == 0:
                 is_new_session = True
-                
+
             # If it's a new session and we have persona summaries, add them to context
             # if is_new_session and model_id:
             #     try:
@@ -196,21 +197,23 @@ class ChatProcessor:
             #                 persona_name = summary.get("persona_name", f"persona_{idx+1}")
             #                 data = summary.get("data", "")
             #                 persona_summary_str += f"{persona_name}: {data}\n"
-                        
+
             #             if persona_summary_str:
             #                 # Add persona context as a system message
             #                 messages.append(("system", f"Here are the persona narratives for this conversation:\n{persona_summary_str}"))
             #     except Exception as e:
             #         logger.error(f"Error getting persona summaries: {str(e)}")
-            
+
             # Process conversation history - handle large histories efficiently
             if conversation_history:
-                logger.info(f"Processing {len(conversation_history)} messages from conversation history")
-                
+                logger.info(
+                    f"Processing {len(conversation_history)} messages from conversation history"
+                )
+
                 # # If history is very large, use a summary approach
                 # if len(conversation_history) > 20:
                 #     logger.info("Large conversation history detected, using summary approach")
-                    
+
                 #     # Include the first system messages (context setting)
                 #     early_messages = []
                 #     for i, msg in enumerate(conversation_history[:5]):
@@ -218,12 +221,12 @@ class ChatProcessor:
                 #             role = "ai" if msg.get("role") == "assistant" else msg.get("role")
                 #             role = "human" if role == "user" else role
                 #             early_messages.append((role, msg.get("content", "")))
-                    
+
                 #     # Create a summary of the middle part
                 #     if len(conversation_history) > 10:
                 #         middle_index = len(conversation_history) // 2
                 #         middle_range = conversation_history[5:middle_index-3]
-                        
+
                 #         if middle_range:
                 #             # Add a summary message of the middle context
                 #             summary_points = []
@@ -232,10 +235,10 @@ class ChatProcessor:
                 #                     summary_points.append(f"User asked: {msg.get('content', '')[:100]}...")
                 #                 elif msg.get("role") == "assistant":
                 #                     summary_points.append(f"Assistant responded about: {msg.get('content', '')[:100]}...")
-                            
+
                 #             if summary_points:
                 #                 messages.append(("system", f"Summary of previous conversation:\n" + "\n".join(summary_points)))
-                    
+
                 #     # Always include the most recent context (last 10 messages)
                 #     recent_messages = conversation_history[-10:]
                 #     for msg in recent_messages:
@@ -245,7 +248,7 @@ class ChatProcessor:
                 #             messages.append(("human", content))
                 #         elif role == "assistant":
                 #             messages.append(("ai", content))
-                
+
                 # For smaller histories, include all messages
                 # else:
                 for msg in conversation_history:
@@ -255,102 +258,104 @@ class ChatProcessor:
                         messages.append(("human", content))
                     elif role == "assistant":
                         messages.append(("ai", content))
-            
+
             # Add the current message
             messages.append(("human", message))
-            
+
             # Create the prompt template
             prompt = ChatPromptTemplate.from_messages(messages)
-            
+
             # Create the chain
             chain = prompt | self.llm
-            
+
             # Run the chain
             response = await chain.ainvoke({})
-            
+
             # Extract the content
             response_content = response.content
-            
+
             return {
                 "status": "success",
                 "message": response_content,
-                "data": {
-                    "user_id": user_id,
-                    "conversation_id": conversation_id
-                }
+                "data": {"user_id": user_id, "conversation_id": conversation_id},
             }
-            
+
         except Exception as e:
             logger.error(f"Error processing message: {str(e)}")
             return {
                 "status": "error",
                 "message": f"An error occurred while processing your message: {str(e)}",
-                "data": None
+                "data": None,
             }
-    
-    async def _get_persona_summaries(self, user_id: str, model_id: str) -> List[Dict[str, Any]]:
+
+    async def _get_persona_summaries(
+        self, user_id: str, model_id: str
+    ) -> List[Dict[str, Any]]:
         """
         Get persona summaries for the user and model
-        
+
         Args:
             user_id: User identifier
             model_id: Model identifier
-            
+
         Returns:
             List of persona summaries
         """
         try:
             # Query the database for persona summaries without any limit
-            logger.info(f"Retrieving all persona summaries for user_id={user_id}, model_id={model_id}")
+            logger.info(
+                f"Retrieving all persona summaries for user_id={user_id}, model_id={model_id}"
+            )
             summaries = await self.mongodb.find_documents(
                 collection="persona_summaries",
-                query={
-                    "user_id": user_id,
-                    "model_id": model_id,
-                    "is_summary": True
-                },
-                limit=0  # Get all summaries
+                query={"user_id": user_id, "model_id": model_id, "is_summary": True},
+                limit=0,  # Get all summaries
             )
-            
+
             # Also try the persona_summaries collection or get_persona_summaries method
             # This is to handle different DB schema possibilities
             if not summaries:
                 try:
-                    logger.info("Trying to get persona summaries from get_persona_summaries method")
+                    logger.info(
+                        "Trying to get persona summaries from get_persona_summaries method"
+                    )
                     summaries = await self.mongodb.get_persona_summaries(
-                        user_id=user_id,
-                        model_id=model_id
+                        user_id=user_id, model_id=model_id
                     )
                 except Exception as e:
-                    logger.warning(f"Could not get persona summaries from get_persona_summaries: {str(e)}")
-                    
+                    logger.warning(
+                        f"Could not get persona summaries from get_persona_summaries: {str(e)}"
+                    )
+
             logger.info(f"Retrieved {len(summaries)} persona summaries")
             return summaries
         except Exception as e:
             logger.error(f"Error getting persona summaries: {str(e)}")
             return []
-    
-    async def _analyze_intent(self, 
-                             query: str,
-                             chat_history: List[Union[HumanMessage, AIMessage, SystemMessage]],
-                             context: Dict[str, Any]) -> Dict[str, Any]:
+
+    async def _analyze_intent(
+        self,
+        query: str,
+        chat_history: List[Union[HumanMessage, AIMessage, SystemMessage]],
+        context: Dict[str, Any],
+    ) -> Dict[str, Any]:
         """
         Analyze the user's intent to determine if a tool call is needed
-        
+
         Args:
             query: The user's message
             chat_history: The conversation history
             context: Additional context
-            
+
         Returns:
             A dictionary with the intent analysis
         """
         # Create the prompt for intent analysis
         context_str = "\n".join([f"{k}: {v}" for k, v in context.items() if v])
-        
+
         # Add the current query to chat history
         full_history = chat_history + [HumanMessage(content=query)]
-        
+
         # System message with instructions for intent analysis
         intent_system_prompt = f"""
         You are an AI assistant for a marketing personalization system.
@@ -383,45 +388,45 @@ class ChatProcessor:
             "response": "conversational response if no tool call is needed"
         }}
         """
-        
+
         # Create a separate conversation for intent analysis
         intent_messages = [
             SystemMessage(content=intent_system_prompt),
-            HumanMessage(content=f"User message: {query}")
+            HumanMessage(content=f"User message: {query}"),
         ]
-        
+
         # Use LLM to analyze intent
         intent_result = await self.llm.ainvoke(intent_messages)
         intent_content = intent_result.content
-        
+
         # Extract the JSON from the response
         try:
             # The LLM might wrap the JSON in markdown code blocks, so we need to extract it
-            json_match = re.search(r'```json\s*(.*?)\s*```', intent_content, re.DOTALL)
+            json_match = re.search(r"```json\s*(.*?)\s*```", intent_content, re.DOTALL)
             if json_match:
                 json_str = json_match.group(1)
             else:
                 # Try to find JSON without code blocks
-                json_match = re.search(r'(\{.*\})', intent_content, re.DOTALL)
+                json_match = re.search(r"(\{.*\})", intent_content, re.DOTALL)
                 if json_match:
                     json_str = json_match.group(1)
                 else:
                     json_str = intent_content
-                    
+
             # Parse the JSON
             intent_analysis = json.loads(json_str)
-            
+
             # Ensure we have all required fields
             if "tool_call_required" not in intent_analysis:
                 intent_analysis["tool_call_required"] = False
             if "response" not in intent_analysis:
                 intent_analysis["response"] = "I'm not sure how to respond to that."
-                
+
             return intent_analysis
-                
+
         except Exception as e:
             logger.error(f"Error parsing intent analysis: {str(e)}", exc_info=True)
             return {
                 "tool_call_required": False,
-                "response": "I'm having trouble understanding your request. Could you please rephrase it?"
-            } 
+                "response": "I'm having trouble understanding your request. Could you please rephrase it?",
+            }
