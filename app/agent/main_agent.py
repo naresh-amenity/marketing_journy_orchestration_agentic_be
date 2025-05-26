@@ -86,7 +86,7 @@ TOOL_PARAM_DICT = {
 }
 
 TOOL_SELECTION_PROMPT, config_tool_selection = get_prompt_config(
-    prompt_tag="tool selection prompt", label="stage_v2"
+    prompt_tag="tool selection prompt", label="latest"
 )
 extraction_prompt, config_journy_action = get_prompt_config(
     prompt_tag="extraction prompt", label="stage_v1"
@@ -1067,9 +1067,9 @@ class MainAgent:
             problem_statement_flag = False
             if (
                 request.problem_statement
-                or request.model_id
-                or request.audience_id
-                or request.target_id
+                or (request.model_id!="" and request.model_id!=None)
+                or (request.audience_id!="" and request.audience_id!=None)
+                or  (request.target_id!="" and request.target_id!=None)
             ):
                 problem_statement_flag = True
 
@@ -1113,7 +1113,7 @@ class MainAgent:
                     conversation_name=request.conversation_name,
                 )
                 conversation_id = conversation["conversation_id"]
-
+            print("### request.query, conversation_history, conversation_id, request.user_id",request.query, conversation_history, conversation_id, request.user_id)
             tool_selection = await self.select_tool(
                 request.query, conversation_history, conversation_id, request.user_id
             )
@@ -1337,7 +1337,7 @@ class MainAgent:
                         message = "I'd be happy to help with your marketing journey. What would you like to do? You can create a new journey, check status of an existing journey, get a journey report, or update a journey report with persona files."
 
                         # Process the message to replace model IDs with names if session token is available
-                        if request.session_token and request.user_id:
+                        if request.session_token and request.user_id and request.model_id:
                             message = self.replace_model_ids_with_names(
                                 message,
                                 request.session_token,
@@ -1669,7 +1669,7 @@ class MainAgent:
 
                 if not parameters.get("personalization_data_type", ""):
                     print("kkkkkkkkkkkkkkkkkkkkkkkkkkk here")
-                    message = "Do you want to create a persona narrative for audience data or persona data?"
+                    message = "Would you like to generate a persona narrative based on audience data or persona-specific data?"
                     if conversation_id and request.user_id and self.mongodb:
                         await self.mongodb.add_message_to_conversation(
                             conversation_id=conversation_id,
